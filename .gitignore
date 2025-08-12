@@ -1,0 +1,64 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+
+# Environment variables (contains sensitive tokens)
+.env
+.env.local
+.env.production
+
+# Data
+SNSF-Data/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Excel files (if you don't want to commit the data)
+# *.xlsx
+# *.xls
+
+# JSON files with sensitive data
+*.json
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.temp
