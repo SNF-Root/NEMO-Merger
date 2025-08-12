@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script to add area access to users in NEMO by modifying the JSON file and uploading to API.
+Script to add area access to Allen to users in NEMO by modifying the JSON file and uploading to API.
 """
 
 import json
