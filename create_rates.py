@@ -99,6 +99,21 @@ def load_rate_class_mapping(filename: str = "rate_category_mapping.json") -> Dic
         print(f"✗ Error loading rate class mapping: {e}")
         return {}
 
+def load_tool_lookup(filename: str = "tool_lookup.json") -> Dict[str, int]:
+    """Load the tool lookup from the downloaded tools."""
+    try:
+        with open(filename, 'r') as f:
+            lookup = json.load(f)
+        print(f"✓ Loaded tool lookup with {len(lookup)} tools")
+        return lookup
+    except FileNotFoundError:
+        print(f"✗ Tool lookup file {filename} not found!")
+        print("Please run download_tools.py first to download tools from NEMO.")
+        return {}
+    except Exception as e:
+        print(f"✗ Error loading tool lookup: {e}")
+        return {}
+
 def create_snsf_to_nemo_rate_mapping(rate_type_lookup: Dict[str, int]) -> Dict[str, str]:
     """Create a mapping from SNSF rate names to NEMO rate type names."""
     # This mapping connects SNSF rate names to NEMO rate type names
@@ -113,13 +128,13 @@ def create_snsf_to_nemo_rate_mapping(rate_type_lookup: Dict[str, int]) -> Dict[s
     for snsf_name, nemo_type in snsf_to_nemo.items():
         if nemo_type in rate_type_lookup:
             verified_mapping[snsf_name] = nemo_type
-            print(f"✓ Verified mapping: {snsf_name} → {nemo_type}")
+            print(f"✓ Verified mapping: {snsf_name} → {nemo_type} (ID: {rate_type_lookup[nemo_type]})")
         else:
             print(f"⚠ Warning: NEMO rate type '{nemo_type}' not found in lookup")
     
     return verified_mapping
 
-def read_snsf_rates_from_excel(file_path: str, rate_type_lookup: Dict[str, int], rate_class_mapping: Dict[str, int], snsf_to_nemo_mapping: Dict[str, str]) -> List[Dict[str, Any]]:
+def read_snsf_rates_from_excel(file_path: str, rate_type_lookup: Dict[str, int], rate_class_mapping: Dict[str, int], snsf_to_nemo_mapping: Dict[str, str], tool_lookup: Dict[str, int]) -> List[Dict[str, Any]]:
     """Read SNSF rates from Excel file."""
     try:
         df = pd.read_excel(file_path)
@@ -128,17 +143,25 @@ def read_snsf_rates_from_excel(file_path: str, rate_type_lookup: Dict[str, int],
         print(f"Columns: {df.columns.tolist()}")
         
         # Look for required columns
+        equipment_col = None
         rate_name_col = None
         rate_class_col = None
         rate_value_col = None
         
         for col in df.columns:
-            if 'rate name' in col.lower():
+            if 'equipment' in col.lower():
+                equipment_col = col
+            elif 'rate name' in col.lower():
                 rate_name_col = col
             elif 'rate class' in col.lower():
                 rate_class_col = col
             elif col.lower() == 'rate':
                 rate_value_col = col
+        
+        if not equipment_col:
+            print("Warning: No 'equipment' column found")
+            print("Available columns:", df.columns.tolist())
+            return []
         
         if not rate_name_col:
             print("Warning: No 'rate name' column found")
@@ -155,47 +178,67 @@ def read_snsf_rates_from_excel(file_path: str, rate_type_lookup: Dict[str, int],
             print("Available columns:", df.columns.tolist())
             return []
         
-        print(f"Using columns: {rate_name_col}, {rate_class_col}, {rate_value_col}")
+        print(f"Using columns: {equipment_col}, {rate_name_col}, {rate_class_col}, {rate_value_col}")
         
         # Extract rates with their classes and values
         rates = []
         seen_combinations = set()
         
         for _, row in df.iterrows():
+            equipment = str(row[equipment_col]).strip()
             rate_name = str(row[rate_name_col]).strip()
             rate_class = str(row[rate_class_col]).strip()
             rate_value = row[rate_value_col]
             
             # Skip if any required field is missing
-            if (pd.isna(rate_name) or pd.isna(rate_class) or pd.isna(rate_value) or
-                rate_name.lower() == 'nan' or rate_class.lower() == 'nan'):
+            if (pd.isna(equipment) or pd.isna(rate_name) or pd.isna(rate_class) or pd.isna(rate_value) or
+                equipment.lower() == 'nan' or rate_name.lower() == 'nan' or rate_class.lower() == 'nan'):
                 continue
             
+            # Skip "other academic" since it's the same as "local"
+            if rate_class.lower() == 'other academic':
+                print(f"⚠ Skipping 'other academic' for {tool_name} - same as 'local'")
+                continue
+            
+            # Extract tool name from equipment (remove "equipment_" prefix if present)
+            tool_name = equipment
+            if tool_name.lower().startswith('equipment_'):
+                tool_name = tool_name[10:]  # Remove "equipment_" prefix
+            
             # Create unique combination key
-            combination_key = f"{rate_name}_{rate_class}"
+            combination_key = f"{tool_name}_{rate_name}_{rate_class}"
             if combination_key in seen_combinations:
                 continue
             seen_combinations.add(combination_key)
             
-            # Check if we have mappings for both rate type and rate class
-            if rate_name in snsf_to_nemo_mapping and rate_class.lower() in rate_class_mapping:
-                nemo_type_name = snsf_to_nemo_mapping[rate_name]
-                rate_type_id = rate_type_lookup[nemo_type_name]
+            # Check if we have mappings for rate name, tool, and rate class
+            if (rate_name in snsf_to_nemo_mapping and 
+                tool_name in tool_lookup and 
+                rate_class.lower() in rate_class_mapping):
+                
+                # Get the NEMO rate type name and ID
+                nemo_rate_type = snsf_to_nemo_mapping[rate_name]
+                rate_type_id = rate_type_lookup[nemo_rate_type]
+                tool_id = tool_lookup[tool_name]
                 rate_class_id = rate_class_mapping[rate_class.lower()]
                 
                 rates.append({
+                    'tool_name': tool_name,
+                    'tool_id': tool_id,
                     'rate_name': rate_name,
                     'rate_class': rate_class,
                     'rate_value': float(rate_value),
                     'rate_type_id': rate_type_id,
                     'rate_class_id': rate_class_id,
-                    'nemo_type_name': nemo_type_name,
+                    'nemo_type_name': nemo_rate_type,
                     'nemo_category_name': get_nemo_category_name(rate_class_id, rate_class_mapping)
                 })
-                print(f"✓ Mapped '{rate_name}' + '{rate_class}' → Type: {nemo_type_name}, Category: {get_nemo_category_name(rate_class_id, rate_class_mapping)}")
+                print(f"✓ Mapped '{tool_name}' + '{rate_name}' + '{rate_class}' → Tool ID: {tool_id}, Type: {nemo_rate_type}, Category: {get_nemo_category_name(rate_class_id, rate_class_mapping)}")
             else:
                 if rate_name not in snsf_to_nemo_mapping:
-                    print(f"⚠ No mapping found for rate type: {rate_name}")
+                    print(f"⚠ No mapping found for rate name: {rate_name}")
+                if tool_name not in tool_lookup:
+                    print(f"⚠ No tool found with name: {tool_name}")
                 if rate_class.lower() not in rate_class_mapping:
                     print(f"⚠ No mapping found for rate class: {rate_class}")
         
@@ -223,11 +266,12 @@ def create_rate_payload(rate_data: Dict[str, Any]) -> Dict[str, Any]:
     """Create a rate payload with the given data."""
     payload = RATE_TEMPLATE.copy()
     payload["type"] = rate_data['rate_type_id']
-    payload["category"] = rate_data['rate_class_id']
-    payload["rate"] = rate_data['rate_value']
+    payload["amount"] = rate_data['rate_value']  # Map to "amount" field
     
-    # Set notes with detailed information
-    payload["notes"] = f"Migrated from SNSF: {rate_data['rate_name']} + {rate_data['rate_class']} = ${rate_data['rate_value']}"
+    # All rate types are now category_specific and item_specific
+    payload["category"] = rate_data['rate_class_id']
+    payload["tool"] = rate_data['tool_id']
+    payload["notes"] = f"Migrated from SNSF: {rate_data['tool_name']} + {rate_data['rate_class']} = ${rate_data['rate_value']}"
     
     return payload
 
@@ -238,27 +282,27 @@ def push_rate_to_api(rate_data: Dict[str, Any], api_url: str) -> bool:
     try:
         response = requests.post(api_url, json=payload, headers=API_HEADERS)
         
-        if response.status_code == 201:  # Created
-            print(f"✓ Successfully created rate: {rate_data['rate_name']} → {rate_data['nemo_type_name']}")
+        if response.status_code == 200:  # Created
+            print(f"✓ Successfully created rate: {rate_data['tool_name']} → {rate_data['nemo_type_name']}")
             return True
         elif response.status_code == 400:
-            print(f"✗ Bad request for rate '{rate_data['rate_name']}': {response.text}")
+            print(f"✗ Bad request for rate '{rate_data['tool_name']}': {response.text}")
             return False
         elif response.status_code == 401:
-            print(f"✗ Authentication failed for rate '{rate_data['rate_name']}': Check your NEMO_TOKEN")
+            print(f"✗ Authentication failed for rate '{rate_data['tool_name']}': Check your NEMO_TOKEN")
             return False
         elif response.status_code == 403:
-            print(f"✗ Permission denied for rate '{rate_data['rate_name']}': Check your API permissions")
+            print(f"✗ Permission denied for rate '{rate_data['tool_name']}': Check your API permissions")
             return False
         elif response.status_code == 409:
-            print(f"⚠ Rate for '{rate_data['rate_name']}' already exists (conflict)")
+            print(f"⚠ Rate for '{rate_data['tool_name']}' already exists (conflict)")
             return False
         else:
-            print(f"✗ Failed to create rate '{rate_data['rate_name']}': HTTP {response.status_code} - {response.text}")
+            print(f"✗ Failed to create rate '{rate_data['tool_name']}': HTTP {response.status_code} - {response.text}")
             return False
             
     except requests.exceptions.RequestException as e:
-        print(f"✗ Network error creating rate '{rate_data['rate_name']}': {e}")
+        print(f"✗ Network error creating rate '{rate_data['tool_name']}': {e}")
         return False
 
 def main():
@@ -287,6 +331,13 @@ def main():
         print("Cannot proceed without rate class mapping. Please run download_rate_categories.py first.")
         return
     
+    print("Loading tool lookup...")
+    tool_lookup = load_tool_lookup()
+    
+    if not tool_lookup:
+        print("Cannot proceed without tool lookup. Please run download_tools.py first.")
+        return
+    
     # Create SNSF to NEMO rate type mapping
     print("Creating SNSF to NEMO rate type mapping...")
     snsf_to_nemo_mapping = create_snsf_to_nemo_rate_mapping(rate_type_lookup)
@@ -303,6 +354,17 @@ def main():
     print("\nLoaded Rate Class Mapping:")
     for name, cat_id in rate_class_mapping.items():
         print(f"  {name} → ID {cat_id}")
+    
+    print("\nLoaded Tool Lookup (first 10 tools):")
+    count = 0
+    for tool_name, tool_id in tool_lookup.items():
+        if count < 10:
+            print(f"  {tool_name} → ID {tool_id}")
+            count += 1
+        else:
+            break
+    if len(tool_lookup) > 10:
+        print(f"  ... and {len(tool_lookup) - 10} more tools")
     
     print("\nSNSF to NEMO Rate Type Mapping:")
     for snsf_name, nemo_type in snsf_to_nemo_mapping.items():
@@ -335,7 +397,7 @@ def main():
     all_rates = []
     for excel_file in rates_files:
         print(f"\nProcessing file: {excel_file}")
-        rates = read_snsf_rates_from_excel(excel_file, rate_type_lookup, rate_class_mapping, snsf_to_nemo_mapping)
+        rates = read_snsf_rates_from_excel(excel_file, rate_type_lookup, rate_class_mapping, snsf_to_nemo_mapping, tool_lookup)
         all_rates.extend(rates)
         print(f"  Extracted {len(rates)} rates from this file")
     
@@ -352,10 +414,12 @@ def main():
     failed_creations = 0
     
     for i, rate_data in enumerate(rates, 1):
-        print(f"\n[{i}/{len(rates)}] Creating rate: {rate_data['rate_name']} + {rate_data['rate_class']}")
-        print(f"  → NEMO Type: {rate_data['nemo_type_name']} (ID: {rate_data['rate_type_id']})")
+        print(f"\n[{i}/{len(rates)}] Creating rate: {rate_data['tool_name']} + {rate_data['rate_name']} + {rate_data['rate_class']}")
+        print(f"  → Tool: {rate_data['tool_name']} (ID: {rate_data['tool_id']})")
+        print(f"  → Rate Type: {rate_data['rate_name']} → {rate_data['nemo_type_name']} (ID: {rate_data['rate_type_id']})")
+        
         print(f"  → NEMO Category: {rate_data['nemo_category_name']} (ID: {rate_data['rate_class_id']})")
-        print(f"  → Rate: ${rate_data['rate_value']}")
+        print(f"  → Rate: ${rate_data['rate_value']} (Tool & Category specific)")
         
         if push_rate_to_api(rate_data, NEMO_RATES_API_URL):
             successful_creations += 1

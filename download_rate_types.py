@@ -1,14 +1,14 @@
 #!/usr/bin/env python3
 """
-Script to download billing rate types from NEMO API and save them locally.
-This will help map different rate types for projects and billing entities.
+Script to download all billing rate types from the NEMO API and create a lookup mapping.
+This creates a mapping from rate type names to rate type IDs for use in rate creation.
 """
 
 import requests
 import json
 import os
 from dotenv import load_dotenv
-from typing import List, Dict, Any
+from typing import Dict, Any
 
 # Load environment variables from .env file
 load_dotenv()
@@ -51,57 +51,78 @@ def test_api_connection():
         print(f"✗ Network error connecting to API: {e}")
         return False
 
-def download_rate_types() -> List[Dict[str, Any]]:
+def download_rate_types(api_url: str) -> list:
     """Download all billing rate types from the NEMO API."""
+    print("Downloading billing rate types from NEMO API...")
+    
     try:
-        print("Downloading billing rate types from NEMO API...")
-        response = requests.get(NEMO_RATE_TYPES_API_URL, headers=API_HEADERS)
+        response = requests.get(api_url, headers=API_HEADERS)
         
         if response.status_code == 200:
             response_data = response.json()
-            print(f"✓ Successfully downloaded response with {response_data.get('count', 0)} billing rate types")
             
-            # Extract the results array from the paginated response
-            if 'results' in response_data and isinstance(response_data['results'], list):
+            # Check if this is a paginated response
+            if 'results' in response_data:
                 rate_types = response_data['results']
-                print(f"✓ Extracted {len(rate_types)} rate types from results")
-                return rate_types
+                print(f"✓ Retrieved {len(rate_types)} rate types from paginated response")
             else:
-                print("✗ No 'results' array found in response")
-                return []
+                # Direct list response
+                rate_types = response_data
+                print(f"✓ Retrieved {len(rate_types)} rate types from direct response")
+            
+            return rate_types
+            
+        elif response.status_code == 401:
+            print("✗ Authentication failed: Check your NEMO_TOKEN")
+            return []
+        elif response.status_code == 403:
+            print("✗ Permission denied: Check your API permissions")
+            return []
         else:
-            print(f"✗ Failed to download billing rate types: HTTP {response.status_code} - {response.text}")
+            print(f"✗ Failed to download rate types: HTTP {response.status_code}")
             return []
             
     except requests.exceptions.RequestException as e:
-        print(f"✗ Network error downloading billing rate types: {e}")
+        print(f"✗ Network error downloading rate types: {e}")
         return []
     except json.JSONDecodeError as e:
-        print(f"✗ Error parsing JSON response: {e}")
+        print(f"✗ Error parsing API response: {e}")
         return []
 
-def save_rate_types_to_file(rate_types: List[Dict[str, Any]], filename: str = "nemo_billing_rate_types.json"):
-    """Save billing rate types to a local JSON file."""
+def save_rate_types_to_json(rate_types: list, filename: str = "billing_rate_types_download.json"):
+    """Save the downloaded rate types to a JSON file."""
     try:
         with open(filename, 'w') as f:
             json.dump(rate_types, f, indent=2)
-        print(f"✓ Successfully saved {len(rate_types)} billing rate types to {filename}")
+        print(f"✓ Rate types saved to {filename}")
     except Exception as e:
-        print(f"✗ Error saving billing rate types to file: {e}")
+        print(f"✗ Error saving rate types to {filename}: {e}")
 
-def create_rate_type_lookup(rate_types: List[Dict[str, Any]]) -> Dict[str, int]:
-    """Create a lookup dictionary mapping rate type names to IDs."""
-    lookup = {}
+def create_rate_type_lookup(rate_types: list) -> Dict[str, int]:
+    """Create a lookup mapping from rate type names to rate type IDs."""
+    rate_type_lookup = {}
+    
     for rate_type in rate_types:
         if 'type' in rate_type and 'id' in rate_type:
-            lookup[rate_type['type']] = rate_type['id']
+            type_name = rate_type['type']
+            type_id = rate_type['id']
+            rate_type_lookup[type_name] = type_id
     
-    print(f"✓ Created lookup for {len(lookup)} billing rate types")
-    return lookup
+    print(f"✓ Created rate type lookup with {len(rate_type_lookup)} types")
+    return rate_type_lookup
+
+def save_rate_type_lookup(rate_type_lookup: Dict[str, int], filename: str = "billing_rate_type_lookup.json"):
+    """Save the rate type lookup to a JSON file."""
+    try:
+        with open(filename, 'w') as f:
+            json.dump(rate_type_lookup, f, indent=2)
+        print(f"✓ Rate type lookup saved to {filename}")
+    except Exception as e:
+        print(f"✗ Error saving rate type lookup to {filename}: {e}")
 
 def main():
-    """Main function to download and save billing rate types."""
-    print("Starting billing rate types download from NEMO API...")
+    """Main function to download rate types and create lookup."""
+    print("Starting billing rate type download from NEMO API...")
     print(f"API Endpoint: {NEMO_RATE_TYPES_API_URL}")
     print("-" * 60)
     
@@ -110,31 +131,34 @@ def main():
         print("Cannot proceed without valid API connection.")
         return
     
-    # Download billing rate types
-    rate_types = download_rate_types()
+    # Download rate types
+    rate_types = download_rate_types(NEMO_RATE_TYPES_API_URL)
     
     if not rate_types:
-        print("No billing rate types downloaded. Cannot proceed.")
+        print("No rate types downloaded. Cannot proceed.")
         return
     
-    # Save billing rate types to file
-    save_rate_types_to_file(rate_types)
+    # Save raw rate types data
+    save_rate_types_to_json(rate_types)
     
     # Create and save rate type lookup
     rate_type_lookup = create_rate_type_lookup(rate_types)
+    save_rate_type_lookup(rate_type_lookup)
     
-    # Save lookup to a separate file for easy access
-    with open("billing_rate_type_lookup.json", 'w') as f:
-        json.dump(rate_type_lookup, f, indent=2)
-    print("✓ Saved billing rate type lookup to billing_rate_type_lookup.json")
+    # Show the complete lookup
+    print("\nComplete billing rate type lookup:")
+    for type_name, type_id in rate_type_lookup.items():
+        print(f"  {type_name} → ID {type_id}")
     
-    # Show the final lookup
-    print("\nFinal billing rate type lookup:")
-    for name, rt_id in rate_type_lookup.items():
-        print(f"  {name} → ID {rt_id}")
-    
-    print(f"\n✓ Billing rate types download complete! {len(rate_types)} types saved locally.")
-    print("You can now use these rate types for project creation and billing configuration.")
+    print("\n" + "=" * 60)
+    print("RATE TYPE DOWNLOAD SUMMARY")
+    print("=" * 60)
+    print(f"Total rate types downloaded: {len(rate_types)}")
+    print(f"Rate types in lookup: {len(rate_type_lookup)}")
+    print(f"✓ Rate type lookup ready for use in rate creation!")
+    print("\nFiles created:")
+    print(f"  - billing_rate_types_download.json (raw rate type data)")
+    print(f"  - billing_rate_type_lookup.json (type name → ID mapping)")
 
 if __name__ == "__main__":
     main()
