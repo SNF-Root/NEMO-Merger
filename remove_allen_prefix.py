@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Script to remove 'Allen/' prefix from tools with any nested category structure.
-This removes 'Allen/' from tools with categories like: Allen/Spilker, Allen/SNSF/Admin, Allen/Shriram/Equipment, etc.
+Script to remove 'Allen/' prefix from tools with specific categories.
+This removes 'Allen/' from tools with categories: Allen/Shriram, Allen/Moore, Allen/Spilker
+and any nested subcategories under these main categories.
 """
 
 import requests
@@ -64,17 +65,21 @@ def download_tools() -> List[Dict[str, Any]]:
 
 def find_tools_to_fix(tools: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Find tools that need the 'Allen/' prefix removed."""
+    categories_to_fix = ['Allen/McCullough', 'Allen/Moore', 'Allen/Spilker', 'Allen/Shriram']
     tools_to_fix = []
 
     for tool in tools:
         if '_category' in tool and tool['_category']:
             category = tool['_category']
-            if category.startswith('Allen/'):
-                # Remove 'Allen/' prefix from any nested structure
-                new_category = category.replace('Allen/', '', 1)  # Only replace first occurrence
-                tool['new_category'] = new_category
-                tools_to_fix.append(tool)
-                print(f"Found tool to fix: {tool['name']} - {category} → {new_category}")
+            # Check if the category starts with any of our target prefixes
+            for prefix in categories_to_fix:
+                if category.startswith(prefix):
+                    # Remove 'Allen/' prefix from any nested structure
+                    new_category = category.replace('Allen/', '', 1)  # Only replace first occurrence
+                    tool['new_category'] = new_category
+                    tools_to_fix.append(tool)
+                    print(f"Found tool to fix: {tool['name']} - {category} → {new_category}")
+                    break  # Found a match, no need to check other prefixes
 
     return tools_to_fix
 
