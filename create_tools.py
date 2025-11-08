@@ -37,7 +37,7 @@ API_HEADERS = {
 TOOL_TEMPLATE = {
     "id": None,  # Will be assigned by API
     "name": "",  # This is what we'll fill from Excel
-    "visible": True,
+    "visible": False,
     "_description": "",  # Will be filled manually
     "_serial": "",  # Changed from None to empty string
     "_image": "",  # Changed from None to empty string
@@ -45,7 +45,7 @@ TOOL_TEMPLATE = {
     "_category": "SNSF",  # Will be filled manually
     "_operational": True,
     "_properties": "",  # Changed from None to empty string
-    "_location": "",  # Will be filled manually
+    "_location": "",  # Will be filled from Excel 'location' column
     "_phone_number": "",  # Changed from None to empty string
     "_notification_email_address": "",  # Changed from None to empty string
     "_qualifications_never_expire": False,
@@ -84,27 +84,36 @@ TOOL_TEMPLATE = {
     "_shadowing_verification_reviewers": []
 }
 
-def read_tool_names_from_excel(file_path: str) -> List[str]:
-    """Read tool names from an Excel file."""
+def read_tools_from_excel(file_path: str) -> List[Dict[str, str]]:
+    """Read tool names and locations from an Excel file."""
     try:
         df = pd.read_excel(file_path)
-        if 'name' in df.columns:
-            # Filter out NaN values and empty strings
-            tool_names = df['name'].dropna().astype(str).str.strip()
-            tool_names = tool_names[tool_names != ''].tolist()
-            print(f"Found {len(tool_names)} tools in {file_path}")
-            return tool_names
-        else:
+        if 'name' not in df.columns:
             print(f"Warning: No 'name' column found in {file_path}")
             return []
+        
+        tools = []
+        for _, row in df.iterrows():
+            tool_name = row.get('name', '')
+            if pd.notna(tool_name) and str(tool_name).strip() != '':
+                tool_data = {
+                    'name': str(tool_name).strip(),
+                    'location': str(row.get('location', '')).strip() if pd.notna(row.get('location')) else ''
+                }
+                tools.append(tool_data)
+        
+        print(f"Found {len(tools)} tools in {file_path}")
+        return tools
     except Exception as e:
         print(f"Error reading {file_path}: {e}")
         return []
 
-def create_tool_payload(tool_name: str) -> Dict[str, Any]:
-    """Create a tool payload with the given name."""
+def create_tool_payload(tool_name: str, location: str = "") -> Dict[str, Any]:
+    """Create a tool payload with the given name and location."""
     payload = TOOL_TEMPLATE.copy()
     payload["name"] = tool_name
+    if location:
+        payload["_location"] = location
     
     # Clean up the payload - remove empty strings that might cause API issues
     cleaned_payload = {}
@@ -116,9 +125,9 @@ def create_tool_payload(tool_name: str) -> Dict[str, Any]:
     
     return cleaned_payload
 
-def push_tool_to_api(tool_name: str, api_url: str) -> bool:
+def push_tool_to_api(tool_name: str, api_url: str, location: str = "") -> bool:
     """Push a single tool to the NEMO API."""
-    payload = create_tool_payload(tool_name)
+    payload = create_tool_payload(tool_name, location)
     
     # Debug: Print the payload being sent (for first few tools)
     if tool_name in ["Occupancy: 3D Printer and Wirebonder", "Spilker 004 Office Computer", "SPM Park NX-10"]:
@@ -188,30 +197,40 @@ def main():
         "SNSF-Data/SMF Tools.xlsx"
     ]
     
-    all_tool_names = []
+    all_tools = []
     
-    # Read tool names from all Excel files
+    # Read tools (name and location) from all Excel files
     for file_path in excel_files:
-        tool_names = read_tool_names_from_excel(file_path)
-        all_tool_names.extend(tool_names)
+        tools = read_tools_from_excel(file_path)
+        all_tools.extend(tools)
     
-    print(f"\nTotal unique tools found: {len(set(all_tool_names))}")
+    # Get unique tools by name (keep first occurrence if duplicates)
+    seen_names = set()
+    unique_tools = []
+    for tool in all_tools:
+        if tool['name'] not in seen_names:
+            seen_names.add(tool['name'])
+            unique_tools.append(tool)
+    
+    print(f"\nTotal unique tools found: {len(unique_tools)}")
     print("-" * 50)
     
-    if not all_tool_names:
+    if not unique_tools:
         print("No tools found to push!")
         return
     
-    print(f"\nReady to push {len(all_tool_names)} tools to NEMO API...")
+    print(f"\nReady to push {len(unique_tools)} tools to NEMO API...")
     
     # Push tools to API
     successful_pushes = 0
     failed_pushes = 0
     
-    for i, tool_name in enumerate(all_tool_names, 1):
-        print(f"\n[{i}/{len(all_tool_names)}] Pushing: {tool_name}")
+    for i, tool in enumerate(unique_tools, 1):
+        tool_name = tool['name']
+        location = tool['location']
+        print(f"\n[{i}/{len(unique_tools)}] Pushing: {tool_name}" + (f" (location: {location})" if location else ""))
         
-        if push_tool_to_api(tool_name, NEMO_API_URL):
+        if push_tool_to_api(tool_name, NEMO_API_URL, location):
             successful_pushes += 1
         else:
             failed_pushes += 1
@@ -223,10 +242,10 @@ def main():
     print("\n" + "=" * 50)
     print("PUSH SUMMARY")
     print("=" * 50)
-    print(f"Total tools processed: {len(all_tool_names)}")
+    print(f"Total tools processed: {len(unique_tools)}")
     print(f"Successful pushes: {successful_pushes}")
     print(f"Failed pushes: {failed_pushes}")
-    print(f"Success rate: {(successful_pushes/len(all_tool_names)*100):.1f}%")
+    print(f"Success rate: {(successful_pushes/len(unique_tools)*100):.1f}%")
     
     if failed_pushes > 0:
         print(f"\nNote: {failed_pushes} tools failed to push.")

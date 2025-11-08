@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
-Script to create NEMO projects from SNSF User Information Excel file.
-Maps 'Project' and 'account' columns to 'name' and 'application_identifier' fields.
+Script to create NEMO projects from SNSF PTA Excel file.
+Maps 'PTA' to 'application_identifier', 'PTA Name' to 'name', 'Account' to account lookup, and 'project_type' to project_types.
 """
 
 import pandas as pd
@@ -16,7 +16,7 @@ import time
 load_dotenv()
 
 # NEMO API endpoint for projects
-NEMO_PROJECTS_API_URL = "https://nemo-plan.stanford.edu/api/projects/"
+NEMO_PROJECTS_API_URL = "https://nemo.stanford.edu/api/projects/"
 
 # Get NEMO token from environment
 NEMO_TOKEN = os.getenv('NEMO_TOKEN')
@@ -77,25 +77,29 @@ def read_user_information_excel(file_path: str) -> pd.DataFrame:
 
 def extract_unique_projects(df: pd.DataFrame) -> List[Dict[str, str]]:
     """Extract unique projects from the DataFrame."""
-    # Filter out rows where project/account is NaN
-    df_filtered = df.dropna(subset=['project', 'account'])
+    # Filter out rows where PTA is NaN (required field)
+    df_filtered = df.dropna(subset=['PTA'])
     
-    # Create unique projects based on project/account combination
+    # Create unique projects based on PTA (application_identifier)
     unique_projects = []
-    seen_projects = set()
+    seen_ptas = set()
     
     for _, row in df_filtered.iterrows():
-        project_name = str(row['project']).strip()
-        account_id = str(row['account']).strip()
+        pta = str(row['PTA']).strip() if pd.notna(row['PTA']) else ""
+        pta_name = str(row['PTA Name']).strip() if pd.notna(row['PTA Name']) else pta
+        account_name = str(row['Account']).strip() if pd.notna(row['Account']) else ""
+        project_type = str(row['project_type']).strip() if pd.notna(row['project_type']) else ""
         
-        # Skip if already processed or if empty
-        if not project_name or not account_id or project_name in seen_projects:
+        # Skip if PTA is empty or already processed
+        if not pta or pta in seen_ptas:
             continue
             
-        seen_projects.add(project_name)
+        seen_ptas.add(pta)
         unique_projects.append({
-            'name': project_name,
-            'application_identifier': account_id
+            'name': pta_name,
+            'application_identifier': pta,
+            'account_name': account_name,
+            'project_type': project_type
         })
     
     print(f"Found {len(unique_projects)} unique projects")
@@ -131,48 +135,110 @@ def load_rate_category_mapping(filename: str = "rate_category_mapping.json") -> 
         print(f"✗ Error loading rate category mapping: {e}")
         return {}
 
+def load_existing_ptas(filename: str = "existing_ptas.json") -> set:
+    """Load existing PTAs from a JSON file."""
+    try:
+        with open(filename, 'r') as f:
+            ptas_list = json.load(f)
+        existing_ptas = set(ptas_list)
+        print(f"✓ Loaded {len(existing_ptas)} existing PTAs from {filename}")
+        return existing_ptas
+    except FileNotFoundError:
+        print(f"⚠ Existing PTAs file {filename} not found!")
+        print("Please run download_projects.py first to download projects from NEMO.")
+        return set()
+    except Exception as e:
+        print(f"✗ Error loading existing PTAs: {e}")
+        return set()
+
+def download_existing_projects() -> set:
+    """Download all existing projects from NEMO API and return a set of PTAs."""
+    try:
+        print("Downloading existing projects from NEMO API...")
+        response = requests.get(NEMO_PROJECTS_API_URL, headers=API_HEADERS)
+        
+        if response.status_code == 200:
+            projects = response.json()
+            # Extract PTAs from projects
+            existing_ptas = set()
+            for project in projects:
+                # Check for PTA field (could be 'PTA', 'pta', 'application_identifier', etc.)
+                pta = None
+                if 'application_identifier' in project and project['application_identifier']:
+                    pta = str(project['application_identifier']).strip()
+                elif 'PTA' in project and project['PTA']:
+                    pta = str(project['PTA']).strip()
+                elif 'pta' in project and project['pta']:
+                    pta = str(project['pta']).strip()
+                
+                if pta and pta.lower() != 'none' and pta.lower() != 'null':
+                    existing_ptas.add(pta)
+            
+            print(f"✓ Successfully downloaded {len(projects)} projects")
+            print(f"✓ Found {len(existing_ptas)} unique PTAs in existing projects")
+            return existing_ptas
+        else:
+            print(f"✗ Failed to download projects: HTTP {response.status_code} - {response.text}")
+            return set()
+            
+    except requests.exceptions.RequestException as e:
+        print(f"✗ Network error downloading projects: {e}")
+        return set()
+    except json.JSONDecodeError as e:
+        print(f"✗ Error parsing JSON response: {e}")
+        return set()
+    except Exception as e:
+        print(f"✗ Error processing projects: {e}")
+        return set()
+
+def filter_existing_projects(projects: List[Dict[str, str]], existing_ptas: set) -> List[Dict[str, str]]:
+    """Filter out projects that already exist in NEMO based on PTA (application_identifier) comparison."""
+    new_projects = []
+    duplicate_projects = []
+    
+    for project in projects:
+        # Compare the PTA (application_identifier) from Excel to the PTAs from API
+        pta = project['application_identifier'].strip()
+        
+        if pta in existing_ptas:
+            duplicate_projects.append(project)
+        else:
+            new_projects.append(project)
+    
+    if duplicate_projects:
+        print(f"⚠ Filtered out {len(duplicate_projects)} duplicate projects (already exist in NEMO):")
+        for dup in duplicate_projects[:10]:  # Show first 10
+            print(f"  - {dup['application_identifier']} ({dup['name']})")
+        if len(duplicate_projects) > 10:
+            print(f"  ... and {len(duplicate_projects) - 10} more duplicates")
+    
+    return new_projects
+
 def match_projects_to_accounts(projects: List[Dict[str, str]], account_lookup: Dict[str, int]) -> List[Dict[str, Any]]:
-    """Match projects to accounts based on PI names from the Excel file."""
+    """Match projects to accounts based on Account name from the Excel file."""
     matched_projects = []
     unmatched_projects = []
     
-    # We need to get PI names from the Excel file to match with accounts
-    # Let me check what columns we have available
-    excel_file = "SNSF-Data/User Information.xlsx"
-    df = pd.read_excel(excel_file)
-    
-    # Create a mapping from project/account to PI name
-    project_to_pi = {}
-    for _, row in df.iterrows():
-        if pd.notna(row['project']) and pd.notna(row['pi email']):
-            project_key = str(row['project']).strip()
-            pi_name = str(row['pi email']).strip()
-            if project_key and pi_name and pi_name.lower() != 'nan':
-                project_to_pi[project_key] = pi_name
-    
-    print(f"Created mapping for {len(project_to_pi)} projects to PIs")
-    
     for project in projects:
-        project_name = project['name']
-        pi_name = project_to_pi.get(project_name, "")
+        account_name = project.get('account_name', '').strip()
         
-        if pi_name and pi_name in account_lookup:
+        if account_name and account_name in account_lookup:
             # Found matching account
             project_with_account = project.copy()
-            project_with_account['account_id'] = account_lookup[pi_name]
-            project_with_account['pi_name'] = pi_name
+            project_with_account['account_id'] = account_lookup[account_name]
             matched_projects.append(project_with_account)
         else:
             # No matching account found
             project_with_account = project.copy()
             project_with_account['account_id'] = None
-            project_with_account['pi_name'] = pi_name
             unmatched_projects.append(project_with_account)
     
     print(f"✓ Matched {len(matched_projects)} projects to accounts")
     if unmatched_projects:
         print(f"⚠ {len(unmatched_projects)} projects could not be matched to accounts")
         print("These will need manual account assignment.")
+        for unmatched in unmatched_projects[:5]:  # Show first 5 unmatched
+            print(f"  - {unmatched['application_identifier']}: Account '{unmatched.get('account_name', 'N/A')}' not found")
     
     return matched_projects + unmatched_projects
 
@@ -185,39 +251,32 @@ def create_project_payload(project_data: Dict[str, Any], rate_mapping: Dict[str,
     # Set the account ID if we have one
     if project_data.get('account_id'):
         payload["account"] = project_data['account_id']
-        print(f"  → Associated with account ID: {project_data['account_id']} (PI: {project_data.get('pi_name', 'Unknown')})")
+        account_name = project_data.get('account_name', 'Unknown')
+        print(f"  → Associated with account ID: {project_data['account_id']} (Account: {account_name})")
     else:
-        print(f"  ⚠ No account found for PI: {project_data.get('pi_name', 'Unknown')}")
+        account_name = project_data.get('account_name', 'Unknown')
+        print(f"  ⚠ No account found for: {account_name}")
     
-    # Set the rate category based on the PI's type from Excel
-    if project_data.get('pi_name'):
-        # We need to get the PI's type from the Excel file
-        excel_file = "SNSF-Data/User Information.xlsx"
-        df = pd.read_excel(excel_file)
-        
-        # Find the PI's type
-        pi_type = None
-        for _, row in df.iterrows():
-            if pd.notna(row['pi email']) and str(row['pi email']).strip() == project_data['pi_name']:
-                if pd.notna(row['type']):
-                    pi_type = str(row['type']).lower().strip()
-                    break
-        
-        if pi_type and pi_type in rate_mapping:
-            payload["category"] = rate_mapping[pi_type]
-            print(f"  → Set rate category ID: {rate_mapping[pi_type]} for type '{pi_type}'")
+    # Set the rate category based on project_type from Excel
+    project_type = project_data.get('project_type', '').strip().lower()
+    if project_type and project_type in rate_mapping:
+        payload["category"] = rate_mapping[project_type]
+        print(f"  → Set rate category ID: {rate_mapping[project_type]} for type '{project_type}'")
+    else:
+        # Default to Academic if type not found or not in mapping
+        for type_name, type_id in rate_mapping.items():
+            if "academic" in type_name.lower():
+                payload["category"] = type_id
+                print(f"  → Defaulted to Academic rate category ID: {type_id}")
+                break
         else:
-            # Default to Academic if type not found or not in mapping
-            for type_name, type_id in rate_mapping.items():
-                if "academic" in type_name.lower():
-                    payload["category"] = type_id
-                    print(f"  → Defaulted to Academic rate category ID: {type_id}")
-                    break
-            else:
-                # If no Academic found, use the first available
-                first_id = list(rate_mapping.values())[0] if rate_mapping else 1
-                payload["category"] = first_id
-                print(f"  → Defaulted to first available rate category ID: {first_id}")
+            # If no Academic found, use the first available
+            first_id = list(rate_mapping.values())[0] if rate_mapping else 1
+            payload["category"] = first_id
+            print(f"  → Defaulted to first available rate category ID: {first_id}")
+    
+    # Note: project_types is a list field in the API, but we're not setting it here
+    # as it may require additional mapping or manual configuration
     
     return payload
 
@@ -272,8 +331,8 @@ def push_project_to_api(project_data: Dict[str, str], api_url: str, rate_mapping
         return False
 
 def main():
-    """Main function to read user information and create projects."""
-    print("Starting project creation from SNSF User Information...")
+    """Main function to read PTA information and create projects."""
+    print("Starting project creation from SNSF PTA Excel file...")
     print(f"API Endpoint: {NEMO_PROJECTS_API_URL}")
     print("-" * 60)
     
@@ -283,7 +342,7 @@ def main():
         return
     
     # Read the Excel file
-    excel_file = "SNSF-Data/User Information.xlsx"
+    excel_file = "SNSF-Data/Copy of SNSF PTAs for Alex Denton.xlsx"
     df = read_user_information_excel(excel_file)
     
     # Extract unique projects
@@ -292,6 +351,26 @@ def main():
     if not unique_projects:
         print("No projects found to create!")
         return
+    
+    # Load existing PTAs from file (or download if file doesn't exist)
+    print("\nLoading existing PTAs...")
+    existing_ptas = load_existing_ptas()
+    
+    if not existing_ptas:
+        print("⚠ Warning: Could not load existing PTAs from file. Attempting to download from API...")
+        existing_ptas = download_existing_projects()
+        
+        if not existing_ptas:
+            print("⚠ Warning: Could not download existing projects or no projects found. Proceeding without duplicate check.")
+    
+    print("\nFiltering out duplicate projects...")
+    filtered_projects = filter_existing_projects(unique_projects, existing_ptas)
+    
+    if not filtered_projects:
+        print("No new projects to create! All projects already exist in NEMO.")
+        return
+    
+    print(f"\n✓ {len(filtered_projects)} new projects to create (filtered out {len(unique_projects) - len(filtered_projects)} duplicates)")
     
     # Load account lookup and rate category mapping
     print("\nLoading account lookup...")
@@ -309,7 +388,7 @@ def main():
         return
     
     print("Matching projects to accounts...")
-    projects_with_accounts = match_projects_to_accounts(unique_projects, account_lookup)
+    projects_with_accounts = match_projects_to_accounts(filtered_projects, account_lookup)
     
     print(f"\nReady to create {len(projects_with_accounts)} projects...")
     
@@ -333,10 +412,13 @@ def main():
     print("\n" + "=" * 60)
     print("PROJECT CREATION SUMMARY")
     print("=" * 60)
-    print(f"Total projects processed: {len(unique_projects)}")
+    print(f"Total projects in Excel: {len(unique_projects)}")
+    print(f"Duplicate projects (already exist): {len(unique_projects) - len(filtered_projects)}")
+    print(f"New projects to create: {len(filtered_projects)}")
     print(f"Successfully created: {successful_creations}")
     print(f"Failed to create: {failed_creations}")
-    print(f"Success rate: {(successful_creations/len(unique_projects)*100):.1f}%")
+    if len(filtered_projects) > 0:
+        print(f"Success rate: {(successful_creations/len(filtered_projects)*100):.1f}%")
     
     if failed_creations > 0:
         print(f"\nNote: {failed_creations} projects failed to create.")

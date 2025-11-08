@@ -7,6 +7,7 @@ This is needed before creating projects since projects must be associated with a
 import requests
 import json
 import os
+import csv
 from dotenv import load_dotenv
 from typing import List, Dict, Any
 
@@ -14,7 +15,7 @@ from typing import List, Dict, Any
 load_dotenv()
 
 # NEMO API endpoint for accounts
-NEMO_ACCOUNTS_API_URL = "https://nemo-plan.stanford.edu/api/accounts/"
+NEMO_ACCOUNTS_API_URL = "https://nemo.stanford.edu/api/accounts/"
 
 # Get NEMO token from environment
 NEMO_TOKEN = os.getenv('NEMO_TOKEN')
@@ -81,6 +82,37 @@ def save_accounts_to_file(accounts: List[Dict[str, Any]], filename: str = "nemo_
     except Exception as e:
         print(f"✗ Error saving accounts to file: {e}")
 
+def save_accounts_to_csv(accounts: List[Dict[str, Any]], filename: str = "nemo_accounts.csv"):
+    """Save accounts to a CSV file, sorted by ID in ascending order."""
+    if not accounts:
+        print("No accounts to save to CSV")
+        return
+    
+    try:
+        # Sort accounts by ID in ascending order
+        sorted_accounts = sorted(accounts, key=lambda x: x.get('id', 0))
+        
+        # Get all unique keys from all accounts to create comprehensive headers
+        all_keys = set()
+        for account in sorted_accounts:
+            all_keys.update(account.keys())
+        
+        # Define column order (ID first, then others alphabetically)
+        fieldnames = ['id'] + sorted([k for k in all_keys if k != 'id'])
+        
+        with open(filename, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=fieldnames)
+            writer.writeheader()
+            
+            for account in sorted_accounts:
+                # Convert None values to empty strings for CSV
+                row = {k: ('' if v is None else v) for k, v in account.items()}
+                writer.writerow(row)
+        
+        print(f"✓ Successfully saved {len(sorted_accounts)} accounts to {filename} (sorted by ID)")
+    except Exception as e:
+        print(f"✗ Error saving accounts to CSV: {e}")
+
 def create_account_lookup(accounts: List[Dict[str, Any]]) -> Dict[str, int]:
     """Create a lookup dictionary mapping account names to IDs."""
     lookup = {}
@@ -111,6 +143,9 @@ def main():
     
     # Save accounts to file
     save_accounts_to_file(accounts)
+    
+    # Save accounts to CSV (sorted by ID)
+    save_accounts_to_csv(accounts)
     
     # Create and save account lookup
     account_lookup = create_account_lookup(accounts)

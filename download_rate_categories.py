@@ -14,7 +14,7 @@ from typing import List, Dict, Any
 load_dotenv()
 
 # NEMO API endpoint for rate categories
-NEMO_RATE_CATEGORIES_API_URL = "https://nemo-plan.stanford.edu/api/billing/rate_categories/"
+NEMO_RATE_CATEGORIES_API_URL = "https://nemo.stanford.edu/api/billing/rate_categories/"
 
 # Get NEMO token from environment
 NEMO_TOKEN = os.getenv('NEMO_TOKEN')
