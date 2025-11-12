@@ -40,6 +40,11 @@ wheels/
 # JSON files with sensitive data
 *.json
 
+*.xlsx
+*.xls
+*.csv
+
+
 # OS generated files
 .DS_Store
 .DS_Store?
