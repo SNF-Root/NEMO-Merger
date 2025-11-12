@@ -1,0 +1,591 @@
+account_id,account_name,account_type,account_active,account_start_date,has_project,project_count,project_names
+1,SNF Staff,4,True,2023-08-28,Yes,3,"No charge, Staff Cross-Training Proposal DDLQA, Staff WG Leader/Learning Project"
+2,CK Industries LLC,2,False,2023-09-20,No,0,
+3,CK Account,1,True,2023-09-28,Yes,1,Nutbutter 1234567-1-YOUBER
+4,4DS Memory,3,False,,Yes,1,4DS Memory
+5,Acorn Semi LLC,3,True,,Yes,2,"Acorn Semi LLC, Acorn Semi - SNSF"
+49,Adaps Photonics,3,False,,Yes,1,Adaps Photonics
+50,AKHAN Semiconductor,3,False,,Yes,1,AKHAN Semiconductor
+51,Akxel Microsystems,3,True,,Yes,1,Akxel Microsystems
+52,Aligned Carbon,3,False,,Yes,1,Aligned Carbon
+53,Alta Microtec Inc,3,True,,Yes,1,Alta Microtec Inc
+54,Ana Lomeli,3,True,,Yes,1,Lomeli 1230123-1-AUCLN
+55,Antora Energy,3,True,,Yes,1,Antora Energy
+56,Applied Materials,3,True,,Yes,1,Applied Materials
+57,Applied Materials (Doshay),3,False,,Yes,1,Applied Materials (Doshay)
+58,Applied Materials (Krishnan),3,True,,Yes,1,Applied Materials (Krishnan)
+59,Applied Materials (Liu),3,True,,Yes,1,Applied Materials (Liu)
+60,"Arbabian, Amin",1,True,,Yes,6,"Arbabian 1213932-10-SXJBL, Arbabian 1216122-10-PANON, Arbabian 1272750-3-UBHPM ... (+3 more)"
+61,Archer Aviation,3,True,,Yes,1,Archer Aviation
+62,Arctic University of Norway,5,True,,Yes,1,Arctic University of Norway (Antonsen)
+63,Aria Photonics,3,True,,Yes,1,Aria Photonics
+64,"Arnold, Don",3,False,,Yes,1,Eksigent Technologies
+65,"Asch, Steven",1,True,,Yes,1,Asch 1234490-206-PASRS
+66,"Asheghi, Mehdi",1,True,,Yes,3,"Asheghi 1189263-7-QCAGD, Asheghi 1221679-2-UANEC, Asheghi 1238084-1-SDGAB"
+67,"Ashley, Euan",1,True,,Yes,2,"Ashley 1136673-100-GHBVP, Ashley 1267543-130-PALNK"
+68,Atrius Energy,3,True,,Yes,1,Atrius Energy
+69,Avicena Tech,3,True,,Yes,1,Avicena Tech
+70,"Bagley, Elizabeth",1,True,,Yes,1,Bagley 1258798-300-UAHXH
+71,Bandwidth 10,3,True,,Yes,1,Bandwidth 10
+72,"Bao, Zhenan",1,True,,Yes,36,"Bao 1091062-1-DENHS, Bao 1096072-1-BENHN, Bao 1103965-1-GENPI ... (+33 more)"
+73,"Barron, Annelise",1,True,,Yes,2,"Barron 1247529-10-PAVZT, Barron 1288648-1-GWPUC"
+74,"Battiato, Ilenia",1,True,,Yes,2,"Battiato 1223915-10-SDDCL, Battiato 1289267-10-UBKTK"
+75,"Beetz, Tobi",1,True,,Yes,6,"Beetz 1161726-202-DAARZ, Beetz 1165470-100.10-ACAFI, Beetz 1165470-100.2-ACAFI ... (+3 more)"
+76,"Bent, Stacey",1,True,,Yes,15,"Bent 1005685-1-BAEBP, Bent 1030314-1-EAFHR, Bent 1138115-5-SDDLA ... (+12 more)"
+77,"Boahen, Kwabena",1,True,,Yes,1,Boahen 1272192-10-WXBMZ
+78,Bosch (RTC43),3,True,,Yes,2,"Bosch (RPA), Bosch (RTC43)"
+79,Break,3,False,,Yes,1,Break
+80,"Brongersma, Mark",1,True,,Yes,16,"Brongersma 1005691-1-BADEU, Brongersma 1036085-15-ATBST, Brongersma 1080157-1-DAEAC ... (+13 more)"
+81,Capacitor Sciences,3,False,,Yes,1,Capacitor Sciences
+82,Carbide Radio,3,True,,Yes,1,Carbide Radio
+83,Centrillion Bio,3,True,,Yes,1,Centrillion Bio
+84,"Chang, Fu-Kuo",1,True,,Yes,1,Chang 1252562-100-TCAAP
+85,"Chen, Xiaoke",1,True,,Yes,1,Chen 1225407-200-WXAXC
+86,"Chiang, Bryce",1,True,,Yes,1,Chiang 1187885-172-EHBEA
+87,"Chichilnisky, E.J.",1,True,,Yes,2,"Chichilnisky 1258773-100-PAJAV, Chichilnisky 1300053-101-PCVLA"
+88,"Chiu, Wah",1,True,,Yes,2,"Chiu 1197323-20-ATCMR, Chiu 1207318-1-DPDMG"
+89,"Chowdhury, Srabanti",1,True,,Yes,34,"Chowdhury 1186168-6-ATCFW, Chowdhury 1230072-1-DPDYZ, Chowdhury 1235187-1-SDBYE ... (+31 more)"
+90,Chronus Health,3,True,,Yes,1,Chronus Health
+91,"Chu, Steven",1,True,,Yes,5,"Chu 1036107-25-ATBSI, Chu 1171190-1-GKJTW, Chu 1230386-300-EAFGS ... (+2 more)"
+92,"Chueh, Will",1,True,,Yes,10,"Chueh 1036107-31-ATBSI, Chueh 1165487-1-DJYBF, Chueh 1197593-27-ATCID ... (+7 more)"
+93,"Clemens, Bruce",1,True,,Yes,1,Clemens 1005699-1-BAEBI
+94,"Coleman, Todd",1,True,,Yes,3,"Coleman 1255061-1-GWNLR, Coleman 1270958-100-WXBJU, Coleman 1287990-10-WOABD"
+95,Complete Genomics,3,True,,Yes,1,Complete Genomics
+96,"Congreve, Dan",1,True,,Yes,13,"Congreve 1243619-1-DPOAB, Congreve 1243619-2-DPOAB, Congreve 1259859-1-WXAQM ... (+10 more)"
+97,Covalent Metrology,3,False,,Yes,2,"Covalent Metrology, Covalent Metrology -SNSF"
+98,"Cui, Bianxiao",1,True,,Yes,5,"Cui 1132939-100-UAJPE, Cui 1253296-100-PAFJB, Cui 1253873-100-PAGCP ... (+2 more)"
+99,"Cui, Yi",1,True,,Yes,18,"1305835-1-GEJOS, Cui 1036107-25-ATBSI, Cui 1155750-1-GFDDI ... (+15 more)"
+100,"Cutkosky, Mark",1,True,,Yes,3,"Cutkosky 1005694-1-BAEBF, Cutkosky 1088851-1-DENHL, Cutkosky 1225094-1-UBEEI"
+101,"Dauskardt, Reinhold",1,True,,Yes,8,"Dauskardt 1250383-1-TABBB, Dauskardt 1255417-4-UBLRG, Dauskardt 1258667-1-SDEAP ... (+5 more)"
+102,"Davis, Mark",1,True,,Yes,1,Davis 1108636-101-KHACC
+103,"Davis, Ron",1,True,,Yes,1,Davis 1212752-100-GHFSH
+104,DC Fusion,3,True,,Yes,2,"DC Fusion, DC Fusion - SNSF"
+105,"de la Zerda, Adam",1,True,,Yes,2,"de la Zerda 1182509-100-GHELD, De La Zerda 1229315-100-GHCZV"
+107,"DeBoer, Charles",1,True,,Yes,4,"DeBoer 1187885-171-EHBEA, DeBoer 1254272-100-GHHQA, DeBoer 1287329-100-UAQML ... (+1 more)"
+108,Deepcell,3,False,,Yes,1,Deepcell
+109,DeepSight Technology,3,True,,Yes,1,DeepSight Technology
+110,"Demirci, Utkan",1,True,,Yes,2,"Demirci 1251131-10-PAWLV, Demirci 1251444-10-PCRWX"
+111,"DeSimone, Joseph",1,True,,Yes,9,"DeSimone 1247767-100-DHDQY, DeSimone 1251515-100-GHHLH, DeSimone 1263861-5-WPILR ... (+6 more)"
+112,"Devereaux, Thomas",1,True,,Yes,2,"Devereaux 1036107-1-ATBSI, Devereaux 1036107-42-ATBSI"
+113,Digilens,3,False,,Yes,1,Digilens
+114,"Digonnet, Michel",1,True,,Yes,2,"Digonnet 1093338-631-UBBAB, Digonnet 1271179-4945-UBBAB"
+115,"Dionne, Jennifer",1,True,,Yes,18,"Dionne 1036107-28-ATBSI, Dionne 1224629-2-SDDYZ, Dionne 1232153-1-QADXZ ... (+15 more)"
+116,EE General Operations,1,True,,Yes,1,EE 1029156-1-AABED
+117,Elegen,3,True,,Yes,1,Elegen
+118,Enablence,3,True,,Yes,1,Enablence
+119,EvoLOH Inc,3,True,,Yes,2,"EvoLOH Inc, EvoLOH - SNSF"
+120,Facebook Technologies,3,False,,Yes,1,Facebook Technologies
+121,"Fan, Jonathan",1,True,,Yes,9,"Fan 1240042-601-TDAPF, Fan 1251507-601-RDWZA, Fan 1257675-601-QABWU ... (+6 more)"
+122,"Fan, Shanhui",1,True,,Yes,1,Fan 1224629-4-SDDYZ
+123,"Fayer, Michael",1,True,,Yes,4,"1028784-2-AABRR, Fayer 1248764-101-TAYAC, Fayer 1281825-10-QADDH ... (+1 more)"
+124,"Fejer, Martin",1,True,,Yes,5,"Fejer 1209078-601-QCANC, Fejer 1241921-602-QAEKE, Fejer 1249206-601-QAEXV ... (+2 more)"
+125,"Feldman, Ben",1,True,,Yes,5,"Feldman 1036107-47-ATBSI, Feldman 1205736-1-DDLAC, Feldman 1254340-100-QAAML ... (+2 more)"
+127,Flux Photonics Inc,3,True,,Yes,2,"Flux Photonics Inc, Flux Photonics - SNSF"
+128,Fluxion Biosciences,3,False,,Yes,2,"Fluxion Biosciences ATAZX, Fluxion Biosciences AUDTD"
+129,"Gambhir, Sanjiv",1,True,,Yes,1,Gambhir 1190696-200-GHETN
+130,GaNWorks,3,True,,Yes,1,GaNWorks
+131,"Gao, Alex",1,True,,Yes,1,Gao 1266529-300-EAFGS
+132,"Garcia, Chris",1,True,,Yes,1,Garcia 1003874-100-EAICO
+133,geCKo Materials,3,True,,Yes,1,geCKo Materials
+134,Genentech,3,True,,Yes,2,"Genentech, Genentech - SNSF"
+135,"Glenzer, Siegfried",1,True,,Yes,2,"Glenzer 1181343-1-ATCET, Glenzer 1181343-2-ATCET"
+136,Glide Write,3,True,,Yes,1,Glide Write
+137,"Goldhaber-Gordon, David",1,True,,Yes,4,"Goldhaber-Gordon 1036107-13-ATBSI, Goldhaber-Gordon 1243537-100-UARMG, Goldhaber-Gordon 1245761-100-QAERM ... (+1 more)"
+138,"Goodman, Miriam",1,True,,Yes,2,"Goodman 1212360-100-PANBM, Goodman 1212424-101-EAFGS"
+139,"Goodson, Kenneth",1,True,,Yes,7,"Goodson 1005796-1-BADYZ, Goodson 1189263-1-QCAGD, Goodson 1226635-1-UBKTA ... (+4 more)"
+140,Google (Hutchison),3,True,,Yes,1,Google (Hutchison)
+141,GraphWear,3,False,,Yes,1,GraphWear
+142,"Gratta, Giorgio",1,True,,Yes,5,"Gratta 1058263-1-EALVP, Gratta 1281541-100-UAOVL, Gratta 1282178-101-TEAHF ... (+2 more)"
+143,"Gu, Wendy",1,True,,Yes,14,"Gu 1045020-2-KATCJ, Gu 1205046-1-GWMYO, Gu 1219236-1-DPDWS ... (+11 more)"
+145,"Guenthart, Brandon",1,True,,Yes,1,Guenthart 1258702-100-EHCCR
+146,H and D Distributors,3,True,,Yes,1,H and D Distributors
+147,"Harris, James",1,True,,Yes,1,Harris 1168806-1-DJYCC
+148,"Heilshorn, Sarah",1,True,,Yes,11,"Heilshorn 1248670-100-QAEWC, Heilshorn 1252883-100-QAAID, Heilshorn 1277089-100-UDCIV ... (+8 more)"
+149,"Heinz, Tony",1,True,,Yes,4,"Heinz 1124705-9-ATDBF, Heinz 1206074-601-QACSQ, Heinz 1243461-601-UAZGX ... (+1 more)"
+150,"Hesselink, Lambertus",1,True,,Yes,5,"Hesselink 1005826-1-BADYU, Hesselink 1249232-101-PAWOO, Hesselink 1268691-500-GAMXW ... (+2 more)"
+151,"Hestrin, Shaul",1,True,,Yes,2,"Hestrin 1165275-200-GHDVC, Hestrin 1177480-100-GHEGM"
+152,"Hong, Guosong",1,True,,Yes,12,"Hong 1153460-1-GAJTZ, Hong 1247802-1-WXDBY, Hong 1255897-1-UAHFR ... (+9 more)"
+153,Hound Labs,3,True,,Yes,1,Hound Labs
+154,"Hwang, Harold",1,True,,Yes,4,"Hwang 1036085-12-ATBST, Hwang 1036107-22-ATBSI, Hwang 1239133-100-UAQPZ ... (+1 more)"
+155,Imagia,3,True,,Yes,1,Imagia
+156,Inchfab,3,True,,Yes,1,Inchfab
+157,Innovalight - DuPont,3,True,,Yes,1,Innovalight - DuPont
+158,Inscopix,3,False,,Yes,1,Inscopix
+159,Intevac Inc,3,True,,Yes,1,Intevac Inc
+160,"Irwin, Kent",1,True,,Yes,2,"Irwin 1164171-1-DCJTM, Irwin 1249448-4-ATDPQ"
+161,Jacksons Processing Solutions,3,True,,Yes,1,Jacksons Processing Solutions
+162,"Jaramillo, Thomas",1,True,,Yes,14,"Jaramillo 1135812-1-ATBYZ, Jaramillo 1135812-5-ATBYZ, Jaramillo 1135812-6-ATBYZ ... (+11 more)"
+163,"Kao, Chi-Chang",1,True,,Yes,1,Kao 1197593-44-ATCID
+164,"Kapitulnik, Aharon",1,True,,Yes,2,"Kapitulnik 1036107-8-ATBSI, Kapitulnik 1282350-100-QADHG"
+165,"Kasevich, Mark",1,True,,Yes,1,Kasevich 1223408-100-SDDYM
+166,"Kenny, Thomas",1,True,,Yes,1,Kenny 1005864-1-BADFG
+167,Kepler Computing,3,True,,Yes,2,"Kepler Computing, Kepler Computing - SNSF"
+168,"Khuri-Yakub, Butrus",1,True,,Yes,2,"Khuri-Yakub 1133735-621-UBFLU, Khuri-Yakub 1242070-203-PAPBY"
+169,KLA Corporation (Wang),3,True,,Yes,1,KLA Corporation (Wang)
+170,KLA-Tencor,3,True,,Yes,1,KLA-Tencor
+171,"Kornberg, Roger",1,True,,Yes,1,Kornberg 1265173-100-GHIEP
+172,"Kovscek, Anthony",1,True,,Yes,4,"Kovscek 1004627-1-EAHKQ, Kovscek 1214320-1-GKOVS, Kovscek 1273607-2-UDCDS ... (+1 more)"
+173,"Kozhukh, Leonid",3,True,,Yes,1,Kozhukh 1281524-1-AUEOX
+174,Lam Research,3,True,,Yes,1,Lam Research
+175,LCLS Clearing,1,True,,Yes,1,LCLS Clearing 1188652-1-ATCHZ
+176,"Le, Quynh-Thu",1,True,,Yes,1,Le 1253985-100-PAGIV
+177,"Lee, Anson",1,True,,Yes,1,Lee 1194023-100-EHBGQ
+178,Leia,3,False,,Yes,1,Leia
+179,"Levin, Craig",1,True,,Yes,2,"Levin 1270879-100-PANBK, Levin 1287364-101-SDAKV"
+180,"Lew, Adrian",1,True,,Yes,1,Lew 1274783-20-SDALO
+181,"Lin, Michael",1,True,,Yes,1,Lin 1258775-200-PAJBH
+182,"Lindenberg, Aaron",1,True,,Yes,3,"Lindenberg 1036107-23-ATBSI, Lindenberg 1224629-7-SDDYZ, Lindenberg 1251015-10-UBOHN"
+183,"Littau, Karl",3,False,,No,0,
+184,"Liu, Fang",1,True,,Yes,4,"Fang 1243061-1-GALGJ, Liu 1242954-1-FZCKF, Liu 1280741-3-TFANU ... (+1 more)"
+185,Lockheed Martin,3,True,,Yes,2,"Lockheed Martin, Lockheed Martin - SNSF"
+186,"Ma, Michael",1,True,,Yes,2,"Ma 1230648-100-EHBUE, Ma 1284302-100-GHIZM"
+187,"Mabuchi, Hideo",1,True,,Yes,3,"Mabuchi 1231821-663-UBISG, Mabuchi 1281318-601-WZAGX, Mabuchi 1297000-602-QADZD"
+188,"MacArthur, John",1,True,,Yes,1,MacArthur 1236502-100-EHBVU
+189,"Mai, Danielle",1,True,,Yes,5,"Mai 1238412-1-GWODM, Mai 1286009-4-DDPDB, Mai 1286009-5-DDPDB ... (+2 more)"
+190,"Majumdar, Arun",1,True,,Yes,9,"Majumdar 1169073-1-DJYCH, Majumdar 1197593-1-ATCID, Majumdar 1223747-1-FZAHY ... (+6 more)"
+191,"Mannix, Andrew",1,True,,Yes,12,"113X Supplies - Mannix, Mannix 1036107-51-ATBSI, Mannix 11295729-3-QADXH ... (+9 more)"
+192,"McIntyre, Paul",1,True,,Yes,12,"House N2 Usage - Allen 110X, McIntyre 1005921-1-BADVN, McIntyre 1036085-11-ATBST ... (+9 more)"
+193,"Melosh, Nick",1,True,,Yes,5,"Melosh 1036107-6-ATBSI, Melosh 1082516-1-GENGC, Melosh 1203997-120-WXBEB ... (+2 more)"
+194,Micro-Tracers,3,False,,Yes,1,Micro-Tracers
+195,"Mirkhani, Vahid",1,True,,No,0,
+196,"Mitra, Subhasish",1,True,,Yes,8,"Mitra 1103395-1-DENLM, Mitra 1197625-1-QACGB, Mitra 1263861-1-WPILR ... (+5 more)"
+197,"Moler, Kathryn",1,True,,Yes,1,Moler 1036107-9-ATBSI
+198,"Mukherjee, Kunal",1,True,,Yes,11,"Mukherjee 1242751-1-DPAAB, Mukherjee 1244714-100-QAEPR, Mukherjee 1263209-100-SXBVO ... (+8 more)"
+199,Myra Vision,3,True,,Yes,2,"Myra Vision, Myra Vision - SNSF"
+200,Naio,3,False,,Yes,2,"Naio, Naio - SNSF"
+201,"Nanni, Emilio",1,True,,Yes,1,Nanni 1036107-49-ATBSI
+202,Nanoshift LLC,3,True,,Yes,1,Nanoshift LLC
+203,Nanostructures Inc,3,True,,Yes,1,Nanostructures Inc
+204,Navan Technologies,4,True,,Yes,1,Navan Technologies
+205,"Nielander, Adam",1,True,,Yes,1,Nielander 1135812-6-ATBYZ
+206,Nikon Research,3,True,,Yes,1,Nikon Research
+207,Northrup Grumman,3,False,,Yes,1,Northrup Grumman
+208,Northwestern Uni,5,True,,Yes,1,Northwestern Uni
+209,NovaSolix,3,True,,Yes,2,"NovaSolix, NovaSolix - SNSF"
+210,Orchard Ultrasound,3,True,,Yes,2,"Orchard Ultrasound, Orchard Ultrasound - SNSF"
+211,"Oro, Anthony",1,True,,Yes,1,Oro 1269192-300-TBOAR
+212,"Owen, Scott",1,True,,Yes,1,Owen 1246202-100-DHDQD
+213,Pacific Light and Hologram,3,True,,Yes,1,Pacific Light and Hologram
+214,Pacific Northwest National Lab,2,True,,Yes,1,Pacific Northwest National Lab
+215,"Palanker, Daniel",1,True,,Yes,6,"Palanker 1206335-10-PALOC, Palanker 1227351-200-GHGEP, Palanker 1247070-100-TAAZQ ... (+3 more)"
+216,Paradromics,3,True,,Yes,1,Paradromics
+217,"Pease, Fabian",1,True,,Yes,2,"Pease 1005951-1-BADEM, Pease 1239943-1-GWPAF"
+218,Perosphere,3,False,,Yes,1,Perosphere
+219,"Poon, Ada",1,True,,Yes,6,"Poon 1130249-1-DONLA, Poon 1261036-10-WXASI, Poon 1261037-4000-WXASI ... (+3 more)"
+220,"Pop, Eric",1,True,,Yes,25,"113X Supplies - Pop, House N2 Usage - Allen 108X, House N2 Usage - Allen 109X ... (+22 more)"
+221,"Prakash, Manu",1,True,,Yes,5,"Prakash 1248318-1-QAEVO, Prakash 1259046-1-DPOCU, Prakash 1266628-10-QCAUE ... (+2 more)"
+222,"Prinz, Fritz",1,True,,Yes,6,"Prinz, Prinz 1005955-1-BADEG, Prinz 1239072-1-UBMSI ... (+3 more)"
+223,ProbiusDx,4,False,,Yes,1,ProbiusDx
+224,PsiQuantum,3,True,,Yes,2,"PsiQuantum, PsiQuantum - SNSF"
+225,Pumpkinseed,4,True,,Yes,1,Pumpkinseed
+226,Quantapore,3,False,,Yes,1,Quantapore
+227,Quantum Pixel,3,True,,Yes,2,"Quantum Pixel, Quantum Pixel - SNSF"
+228,QuantumScape,3,False,,Yes,1,QuantumScape
+229,RadiSurf,3,False,,Yes,1,RadiSurf
+230,Rain Neuromorphics,3,False,,Yes,1,Rain Neuromorphics
+231,"Rao, Jianghong",1,True,,Yes,4,"Rao 1027069-7-AABSG, Rao 1224401-200-PAPSD, Rao 1235465-100-PASYZ ... (+1 more)"
+232,Raxium,3,True,,Yes,1,Raxium
+233,"Renz, Malte",1,True,,Yes,1,Renz 1205713-201-DHBMJ
+234,"Rezaei, Soroosh",1,True,,Yes,1,LEADOPTIK
+235,"Rivas, Juan",1,True,,Yes,4,"Rivas 1167321-1-DJYBP, Rivas 1169436-1-GJYFA, Rivas 1285199-10-WPAAE ... (+1 more)"
+236,"Robinson, Brooke",1,True,,Yes,3,"Robinson 1277737-100-UANTQ, Robinson 1277737-110-UAQZX, Robinson  1296393-100-UATLK"
+237,Roche (Genia Technologies),3,True,,Yes,2,"Roche (Genia Technologies), Roche (Genia Technologies) - SNSF"
+238,"Safavi-Naeini, Amir",1,True,,Yes,20,"Safavi-Naeini 1186168-2-ATCFW, Safavi-Naeini 1223408-250-SDDYM, Safavi-Naeini 1231821-620-UBLZN ... (+17 more)"
+239,"Sakdinawat, Anne",1,True,,No,0,
+240,Sakuu,3,False,,Yes,2,"Sakuu, Sakuu - SNSF"
+241,"Salleo, Alberto",1,True,,Yes,13,"Salleo 1036085-18-ATBST, Salleo 1036085-1-ATBST, Salleo 1103793-1-BENJD ... (+10 more)"
+242,Samsung (Wahid),3,True,,Yes,1,Samsung (Wahid)
+243,San Francisco State - Newaz,2,False,,Yes,1,San Francisco State - Newaz
+244,Sandia National (Kumar),5,True,,Yes,2,"Sandia National (Kumar), Sandia National - SNSF"
+245,Sanli Ergun,3,False,,No,0,
+246,"Saraswat, Krishna",1,True,,Yes,7,"113X Supplies - Saraswat, Saraswat 1006010-1-BADEN, Saraswat 1103330-1-DENLE ... (+4 more)"
+247,"Schuster, David",1,True,,Yes,10,"Schuster 1249448-42-ATDPQ, Schuster 1262333-1-FZCNA, Schuster 1280706-602-TBATE ... (+7 more)"
+248,Science Corporation,3,True,,Yes,2,"Science Corporation, Science Corporation - SNSF"
+249,"Senesky, Debbie",1,True,,Yes,9,"Senesky 1153807-1-GEDDJ, Senesky 1155997-1-DEDDP, Senesky 1221679-3-UANEC ... (+6 more)"
+250,Sequlite Genomics,3,True,,Yes,1,Sequlite Genomics
+251,Siargo,3,True,,Yes,1,Siargo
+252,Signal Biosystems,3,False,,Yes,1,Signal Biosystems
+253,Silicon Microstructures,3,False,,Yes,1,Silicon Microstructures
+254,"Skiniotis, Georgios",1,True,,Yes,1,Skiniotis 1253880-100-PAGIM
+255,SLAC,1,True,,Yes,20,"Chu 1197593-61-ATCID, Cui 1197593-10-ATCID, Cui 1197593-64-ATCID ... (+17 more)"
+256,SLAC Science - AP,1,True,,No,0,
+257,SNF,1,True,,Yes,29,"Community Service, Community Service (ALD), Community Service (ExFab) ... (+26 more)"
+258,"Soh, Tom",1,True,,Yes,11,"House N2 Usage - Allen B104, House N2 Usage - Allen B104X, Soh 1190696-200-GHETN ... (+8 more)"
+259,Solaria,3,False,,Yes,1,Solaria
+260,"Solgaard, Olav",1,True,,Yes,6,"Solgaard 1006028-200-BADEP, Solgaard 1186477-603-UAGZE, Solgaard 1280424-601-SDAJV ... (+3 more)"
+261,Spark Thermionics,3,True,,Yes,1,Spark Thermionics
+262,SRI (general),2,True,,Yes,1,SRI (general)
+263,SSRL,1,True,,Yes,1,SSRL 1036085-1-ATBST
+264,Stratio (RPA),2,True,,Yes,1,Stratio (RPA)
+265,SungKyunKwan University - Han,5,True,,Yes,1,SungKyunKwan University - Han
+266,Sunrise Memory,3,True,,Yes,1,Sunrise Memory
+267,"Suzuki, Yuri",1,True,,Yes,7,"Suzuki, Suzuki 1036107-57-ATBSI, Suzuki 1144123-1-FZBQG ... (+4 more)"
+268,Takara Bio,3,True,,Yes,1,Takara Bio
+269,"Tang, Sindy",1,True,,Yes,12,"Tang 1144994-1-DDNDP, Tang 1200369-115-DHBIB, Tang  1234251-1-QAEDF ... (+9 more)"
+270,"Tantawi, Sami",1,True,,Yes,3,"Tantawi 1186168-1-ATCFW, Tantawi 1210776-100-QACYQ, Tantawi 1226267-1-ATDKO"
+271,"Tarpeh, William",1,True,,Yes,14,"Tarpeh 1246382-1-QAETA, Tarpeh 1258286-1-QABWW, Tarpeh 1258286-5-QABWW ... (+11 more)"
+272,"Thakor, Avnesh",1,True,,Yes,2,"Thakor 1181903-100-JHAGK, Thakor 1214399-133-GHFTY"
+273,ThinSiC,4,True,,Yes,1,ThinSiC
+274,"Toney, Michael",1,True,,Yes,1,Toney 1200606-2-TDAEF
+275,Torramics,3,False,,Yes,2,"Torramics, Torramics - SNSF"
+276,Triple Ring Technologies,3,False,,Yes,1,Triple Ring Technologies
+277,TSMC,3,True,,Yes,3,"TSMC, TSMC - SNSF, TSMC Support (PI: Xinyu Bao)"
+278,Twenty Twenty Therapeutics,3,False,,Yes,1,Twenty Twenty Therapeutics
+279,UC Berkeley,5,True,,Yes,2,"UC Berkeley, UC Berkeley (Yang)"
+280,UC Berkeley (Flounders),5,True,,Yes,1,UC Berkeley (Flounders)
+281,UC Berkeley (Lee),5,True,,Yes,1,UC Berkeley (Lee)
+282,UC Davis,5,True,,Yes,1,UC Davis
+283,UC Davis (Leite),5,True,,Yes,2,"UC Davis (Leite), UC Davis (Leite) - SNSF"
+284,UC Santa Cruz (Sher),5,True,,Yes,2,"UC Santa Cruz (Sher), UC Santa Cruz (Sher) - SNSF"
+285,University of Arkansas (Chen),5,True,,Yes,1,University of Arkansas (Chen)
+286,University of California SF (roy),5,True,,Yes,2,"UCSF (Roy) - SNSF, University of California SF (roy)"
+287,University of Texas at Dallas,5,False,,Yes,1,University of Texas at Dallas
+288,VAT Switzerland,3,False,,Yes,1,VAT Switzerland
+289,"Vezeridis, Alexander",1,True,,Yes,2,"Vezeridis 1027996-337-EAFGW, Vezeridis 1173409-22507-GHEDV"
+290,Vibrant Micro,3,True,,Yes,1,Vibrant Micro
+291,Viewberty,3,False,,Yes,1,Viewberty
+292,VQ Research,3,False,,Yes,1,VQ Research
+293,"Vuckovic, Jelena",1,True,,Yes,21,"Vuckovic 1006358-207-EAFOO, Vuckovic 1036085-14-ATBST, Vuckovic 1036085-9-ATBST ... (+18 more)"
+294,Wako Life Sciences,3,False,,Yes,1,Wako Life Sciences
+295,"Wang, Hai",1,True,,Yes,4,"Wang 1247994-1-TABAI, Wang 1283505-1-TAATC, Wang 1285573-1-TAATT ... (+1 more)"
+296,"Wang, Shan Xiang",1,True,,Yes,5,"Wang 1222391-100-TFRAN, Wang 1263861-4-WPILR, Wang 1273660-100-UBHUQ ... (+2 more)"
+297,Washington State University (Collins),5,False,,Yes,1,Washington State University (Collins)
+298,Wavefront,4,True,,Yes,1,Wavefront
+299,"Waymouth, Robert",1,True,,Yes,2,"Waymouth 1244901-10-PAVER, Waymouth 1292498-10-QADSI"
+300,"Wetzstein, Gordon",1,True,,Yes,1,Wetzstein 1231587-1-GMNAA
+301,"Wong, Philip",1,True,,Yes,18,"113X Supplies - Wong 1154850-1-KDNDT, House N2 Usage - Allen 117X (Wong), Wong 1091728-1-EARDC ... (+15 more)"
+302,"Wong, Simon",1,True,,Yes,1,Wong 1103336-1-DENLJ
+303,"Wong, Wing Hung",1,True,,Yes,1,Wong 1213969-1-GALQF
+304,X.Team,3,False,,Yes,1,X.Team
+305,xMEMS Labs,3,True,,Yes,2,"xMEMS Labs, xMEMS Labs - SNSF"
+306,Zeiss,3,False,,Yes,1,Zeiss
+307,"Zhang, Daping",1,True,,Yes,1,Zhang 1263125-603-SDAKJ
+308,"Zheng, Xiaolin",1,True,,Yes,6,"Zheng 1212007-3-WXBND, Zheng 1249242-1-QCBEM, Zheng 1264429-1-UDBOW ... (+3 more)"
+309,"Yang, Yunzhi",1,True,,Yes,1,Yang 1228590-100-PAJMY
+310,"Cargnello, Matteo",1,True,,Yes,11,"Cargnello 1212007-1-WXBND, Cargnello 1251608-4-UBOJW, Cargnello 1264063-110-UBSEV ... (+8 more)"
+311,"Wu, Joseph",1,True,,Yes,3,"Wu 1267202-100-PALNE, Wu 1267673-100-PALSM, Wu 1284034-100-UAPME"
+312,Cuberg,2,True,,Yes,1,Cuberg
+313,"Fischbach, Michael",1,True,,Yes,1,Fischbach 1251840-130-UATGW
+314,Xylia,2,True,,Yes,2,"Xylia, Xylia - SNSF"
+315,Terecircuits,2,True,,Yes,2,"Terecircuits, Terecircuits - SNSF"
+316,Atomic Machines,2,True,2024-02-01,Yes,1,Atomic Machines Inc
+317,Diamond Quanta Inc,2,True,2024-02-01,Yes,1,Diamond Quanta Inc
+318,Bao 1285607-1-UAPZW,1,True,2024-02-01,No,0,
+319,Bluglass Inc,2,True,2024-02-01,Yes,1,Bluglass Inc
+320,"Haque, Razi-ul",5,True,2024-02-05,Yes,1,Lawrence Livermore National Lab (Haque)
+321,Cui 1197593-51-ATCID,1,True,2024-02-01,Yes,1,Cui 1197593-51-ATCID
+322,Yoon 1261263-100-DHECM,1,True,2024-02-01,Yes,1,Yoon 1261263-100-DHECM
+323,Tacta Systems,2,True,2024-02-01,Yes,1,Tacta Systems 1287834-1-AUEUH
+324,Gratta 1256778-100-QABMM,1,True,2024-02-01,Yes,1,Gratta 1256778-100-QABMM
+325,Pop 1281372-1-GWPPQ,1,True,2024-02-01,Yes,1,Pop 1281372-1-GWPPQ
+326,"Isamukhamedov, Kamol",1,True,2024-02-01,Yes,1,Isamukhamedov 1236866-10-UAQEH
+327,Mojo Vision,2,True,,Yes,1,Mojo Vision
+328,"Das, Rhiju",1,True,,Yes,1,Das 1269512-100-PAMTD
+329,Rejuvenation Technologies Inc.,3,True,,Yes,1,Rejuvenation Tech
+330,Joonhee Choi,1,True,,Yes,1,Choi 1275077-1-GMPMA
+331,Monarch Bio,2,True,,Yes,1,Monarch Bio 1190546-1-AUANB
+332,E241 Class,1,True,,Yes,2,"E241 Spring Quarter 2024, E241 Spring Quarter - 2025"
+333,Diamond Foundry,2,True,,Yes,2,"Diamond Foundry, Diamond Foundry - SNSF"
+334,"Fordyce, Polly",1,True,,Yes,4,"Fordyce 1273618-20-WTABW, Fordyce 1284509-100-PAQZW, Fordyce 1284509-200-PAQZW ... (+1 more)"
+335,Virginia Tech,5,True,,Yes,2,"2024 NNCI NTEC Award, 2025 NNCI NTEC Award"
+336,NanoPattern Technologies Inc,2,True,,Yes,1,NanoPattern Technologies Inc
+337,"Felsher, Dean",1,True,2024-04-01,Yes,3,"Felsher 1247326-400-PAVXZ, Felsher 1247326-500-PAVXZ, Felsher 1247326-600-PAVXZ"
+338,"Dresselhaus-Marais, Leora",1,True,,Yes,8,"Dresselhaus-Marais 1272033-100-SDAIO, Dresselhaus-Marais 1278133-100-SDAJT, Dresselhaus-Marais 1279457-10-TAARP ... (+5 more)"
+339,"Moerner, William",1,True,,Yes,1,Moerner 1124822-1-FZAGA
+340,"Durmus, Gozde",1,True,,Yes,1,Durmus 1288296-101-UDDHI
+341,"3Fates-Xray, Inc",3,True,,Yes,2,"3Fates-Xray, Inc 1292542-1-AUEYN, 3Fates-Xray - SNSF"
+342,"George, Paul",1,True,,Yes,1,George 1272783-100-PANNA
+343,"Schnitzer, Mark",1,True,,Yes,1,Schnitzer 1196206-101-KABKJ
+344,Amid Biosciences,2,True,,Yes,1,Amid Biosciences 1292388-1-AUEYK
+345,Dilectrics,3,True,,Yes,1,Dilectrics 1293054-1-AUEYX
+346,xLight Inc,2,True,2024-06-01,Yes,1,xLight Inc 1293050-1-AUEYV
+347,"Fazah, Maggie",1,True,,No,0,
+348,Arctic Ice Project,2,True,,Yes,1,Arctic Ice Project 1293257-1-AUEYY
+349,University of Illinois (Bayram),5,False,,Yes,2,"University of Illinois (Bayram) 1275423-1-AUEIN, University of Illinois (Bayram) - SNSF"
+350,Artisan Insight,2,True,,Yes,2,"Artisan Insight 1293285-1-AUEYZ, Artisan Insight - SNSF"
+351,"Pratx, Guillem",1,True,,Yes,2,"Pratx 1247243-100-PAVXJ, Pratx 1280153-100-PAPKB"
+352,"Steinmetz, Lars",1,True,,Yes,1,Steinmetz 1250397-100-KHASR
+353,"Tan, Longzhi",1,True,,Yes,1,Tan 1276066-100-UANGT
+354,"Simon, Jonathan",1,True,,Yes,1,Simon 1278591-601-TBASB
+355,"Dunn, Alexander",1,True,,Yes,4,"Dunn 1236013-106-PATCH, Dunn 1287647-10-UAQFV, Dunn 1295681-10-PAURM ... (+1 more)"
+356,QsolX,2,True,,Yes,1,QsolX 1294170-1-AUEZV
+357,Atum Works,2,True,,Yes,1,Atum Works 1294172-1-AUEZW
+358,Gonzalez  1186168-1-ATCFW,1,True,2024-07-01,Yes,1,Gonzalez  1186168-1-ATCFW
+359,"Thiam, Hawa Racine",1,True,,Yes,1,Thiam 1273209-1-GWPLG
+360,"Ladd, Amy",1,True,,Yes,1,Ladd 1290320-100-UARKD
+361,"Lu, Bingwei",1,True,,Yes,1,Lu 1292302-101-PASYQ
+362,Injectsense,3,True,,Yes,1,Injectsense 1294174-1-AUEZX
+363,UC Santa Cruz (Hasan),5,True,,Yes,1,UC Santa Cruz (Hasan) 1295330-1-AUGAG
+364,nEye Systems Inc,2,True,,Yes,1,nEye Systems 1295324-1-AUGAF
+365,UC Berkeley (Rivers),5,True,,Yes,1,UC Berkeley (Rivers) 1296000-1-AUGAY
+366,University of Pennsylvania-Kim,5,True,,Yes,1,Uni. of Pennsylvania-Kim 1261994-1-AUDVN
+367,MindCo Labs,2,True,,Yes,1,MindCo Labs 1296814-1-AUHAI
+368,NTT Research Inc,2,True,,Yes,2,"NTT Research 1297135-1-AUHAN, NTT Research - SNSF"
+369,Echo Neurotechnologies,2,True,,Yes,2,"Echo Neurotechnologies - SNSF, ENT 1297688-1-AUHAY"
+370,"Boettcher, Charlotte",1,True,,Yes,4,"Boettcher 1249448-13-ATDPQ, Boettcher 1280119-1-FZCQH, Boettcher 1305346-10-TFAUR ... (+1 more)"
+371,Analog Devices,2,True,,Yes,1,Analog Devices 1296822-1-AUHAM
+372,Brightlight Photonics,2,False,,Yes,1,Brightlight Photonics
+373,CMatrics,2,True,,Yes,1,CMatrics
+374,Skylight Discovery Inc,2,True,,Yes,1,Skylight Discovery Inc
+375,"Shen, Zhi-Xun",1,True,,Yes,2,"Shen 1036107-1-ATBSI, Shen 1292521-1-GAPFS"
+376,"Feig, Vivian",1,True,,Yes,3,"Feig 1289374-1-GWPUU, Feig 1299061-2-DDPDB, Feig 1308507-2-TFAVX"
+377,"Myung, David",1,True,,Yes,2,"Myung 1229331-100-KHAQT, Myung 1264364-100-PAKIB"
+378,n&k Technology,2,True,,Yes,1,n&k Technology 1298633-1-AUIAZ
+379,"Skylar-Scott, Mark",1,True,,Yes,4,"Skylar-Scott 1267133-100-GHZCH, Skylar-Scott 1272209-10-PANKU, Skylar-Scott 1284459-10-PARAP ... (+1 more)"
+380,"Wender, Paul",1,True,,Yes,3,"Wender 1254613-101-PCFCJ, Wender 1267129-100-PALMP, Wender 1273533-210-UAMLE"
+381,Leap Photovoltaics Inc,3,True,,Yes,1,Leap Photovoltaics Inc 1298970-1-AUJAC
+382,"Kanan, Matthew",1,True,,Yes,8,"Kanan 1135812-9-ATBYZ, Kanan 1148088-1-GCLBO, Kanan 1281848-10-WTACO ... (+5 more)"
+383,"Boxer, Steven",1,True,,Yes,3,"Boxer 1255781-100-PAHZF, Boxer 1267433-100-UDBTY, Boxer 1295605-20-UATFG"
+384,Apple Inc (Perez),2,True,,Yes,1,Apple (Perez) 1300158-1-AUKAG
+385,UC Berkeley (Wu),5,True,,Yes,1,UC Berkeley (Wu)
+386,"Ophus, Colin",1,True,,Yes,2,"Ophus 1036085-17-ATBST, Ophus 1294027-1-GWPXL"
+387,Nautilus Biotechnology,2,True,,Yes,2,"Nautilus 1303620-1-AUMAO, Nautilus Biotechnology - SNSF"
+388,Axiome Bio,2,True,,Yes,1,Axiome Bio
+389,Lawrence Livermore National Lab - Chapin,5,True,,Yes,1,Lawrence Livermore National Lab - Chapin
+390,Sundiode,2,True,,Yes,1,Sundiode Inc
+391,"Kahn, Joseph",1,True,,Yes,2,"Kahn 1289185-610-UBKUD, Kahn 1289185-620-UBKUD"
+392,Sonocharge Inc,2,True,,Yes,1,Sonocharge 1304714-1-AUNAK
+393,Exponent Inc,2,True,,Yes,2,"Exponent 1304752-1-AUNAL, Exponent -SNSF"
+394,"Karunadasa, Hemamala",1,True,,Yes,5,"Karunadasa 1036107-41-ATBSI, Karunadasa 1251015-30-UBOHN, Karunadasa 1267187-20-UAKHY ... (+2 more)"
+395,"Venook, Ross",1,True,,Yes,1,Venook 1199494-590-GHFBU
+396,Nani Lithography,2,True,,Yes,2,"Nani Lithography 1305548-1-AUOAJ, Nani Lithography - SNSF"
+397,"Pauly, Kim Rosemary B.",1,True,2025-05-01,Yes,1,Pauly 1198274-100-EHBIC
+398,"Ricci, Anthony",1,True,,Yes,1,Ricci 1300552-100-PAVVL
+399,Multibeam Corporation,2,True,2025-06-01,Yes,2,"Multibeam Corporation 1185005-1-AUAKO, Multibeam Corporation - SNSF"
+400,"Fame, Ryann",1,True,2025-06-01,Yes,1,Fame 1268762-300-EAFGS
+401,Power Chips 3D,2,True,,Yes,1,Power Chips 3D
+402,"Zare, Richard",1,True,,Yes,1,Zare 1256084-10-TAAFE
+403,ORIC Pharmaceuticals,2,True,,Yes,1,ORIC Pharma
+404,"Kaltschmidt, Julia",1,True,,Yes,1,Kaltschmidt 1294513-101-UZARG
+405,"Krishnan, Siddharth",1,True,,Yes,1,Krishnan 1304495-10-UBODE
+406,Sandisk Corporation,2,True,,Yes,1,Sandisk Corporation
+407,"Plasmonica Bio, Inc.",2,True,2025-07-28,Yes,2,"Plasmonica Bio, Inc. 1307840-1-AUPAV, Plasmonica Bio - SNSF"
+408,Xanadu Quantum Technologies,2,True,,Yes,2,"Xanadu, Xanadu Quantum Tech - SNSF"
+409,"Wang, Paul",1,True,,Yes,1,Wang 1209481-100-GHFNN
+410,Advanced Technology Horizons,2,True,,Yes,1,Advanced Technology Horizons
+411,NovaTech Innovations LLC,2,True,,Yes,2,"NovaTech Innovations, NovaTech Innovations - SNSF"
+412,Physical Sciences Inc,2,True,,Yes,1,Physical Sciences Inc (PSI)
+413,EE 237,1,True,,Yes,1,EE 237L-Solar Energy Conversion Laboratory
+414,Regenerative Patch Technologies,2,True,,Yes,1,Regenerative Patch Technologies
+415,"Arya, Manan",1,True,,Yes,1,Arya 1305930-1-RDAJM
+416,"Stankovic, Konstantina",1,True,,Yes,1,Stankovic 1273374-400-PANPP
+417,Axo Neurotech Inc,2,True,,Yes,1,Axo Neurotech Inc
+418,"Yang, Yunzhi Peter",1,True,,Yes,3,"Yang 1236593-100-DHPFH, Yang 1239922-200-GHGTT, Yang 1297200-30-WXDTH"
+419,"Cabrera, Blas",1,True,,Yes,1,Cabrera 1197315-3-ATCMC
+420,"Hiesinger, William",1,True,,Yes,2,"Hiesinger 1227661-100-DHCTS, Hiesinger 1263135-10-PAJZM"
+421,"Chueh, William",1,True,,Yes,6,"Chueh 1197593-11-ATCID, Chueh 1197593-23-ATCID, Chueh 1197593-58-ATCID ... (+3 more)"
+422,Future Naturalists Corporation,5,True,,Yes,1,Future Naturalists Corporation - SNSF
+423,"NP-Beetz, Tobias",4,True,,Yes,18,"NP-Beetz 1122163-100-AABFD, NP-Beetz 1259532-751-DDLOO, NP-Beetz 1259532-752-DDLOO ... (+15 more)"
+424,Experimental Engineering,2,True,,Yes,1,Experimental Engineering - SNSF
+426,Kaunas University of Technology,5,True,,Yes,1,Kaunas University of Technology - SNSF
+427,Continuity Technologies,2,True,,Yes,1,Continuity Technologies - SNSF
+428,Sila Nanotechnologies,2,True,,Yes,1,Sila Nanotechnologies - SNSF
+429,"NP-Weker, Johanna",1,True,,No,0,
+430,"Follmer, Sean",1,True,,No,0,
+431,"Goldberg, Jeffrey",1,True,,Yes,2,"Goldberg 1298460-50-PAVJI, Goldberg 1300550-104-PAVVS"
+432,Tandem PV,2,True,,Yes,1,Tandem PV - SNSF
+433,NP-MATSCI 163/173,1,True,,No,0,
+434,"Jardetzky, Theodore",1,True,,Yes,2,"Jardetzky 1280053-120-UAOJJ, Jardetzky 1280426-100-TBASX"
+436,"Mao, Wendy Li-Wen",1,True,,Yes,1,Mao 1264360-10-QACGJ
+437,"Cappelli, Mark",1,True,,Yes,1,Cappelli 1276149-1-SDAJK
+440,SRI - Bellew,5,True,,Yes,1,SRI - Bellew - SNSF
+441,"Airan, Raag",1,True,,No,0,
+442,Marathon Fusion,2,True,,Yes,1,Marathon Fusion - SNSF
+443,"Dunn, James Chung-Yu",1,True,,No,0,
+444,"Mahaney, Kelly",1,True,,Yes,2,"Mahaney 1211347-100-DHBQJ, Mahaney 1296888-100-DHPLW"
+445,"Feldman, Benjamin Ezekiel",1,True,,No,0,
+447,"Abu-Remaileh, Monther",1,True,,Yes,1,Abu-Remaileh 1301364-1-UBNKD
+449,Edulis Labs,2,True,,Yes,1,Edulis Labs - SNSF
+450,Pumpkinseed Technologies,2,True,,Yes,1,Pumpkinseed Technologies - SNSF
+451,"NP- Le, Linny",1,True,,No,0,
+452,Novaltech,5,True,,Yes,1,Novaltech - SNSF
+453,"Soh, Hyongsok",1,True,,No,0,
+454,"Swartz, James",1,True,,No,0,
+455,"Appel, Eric",1,True,,Yes,4,"Appel 1221873-1-GWNHI, Appel 1263467-4-UAJNJ, Appel 1263467-5-UAJNJ ... (+1 more)"
+456,"Appel Sauce Studios, LLC",2,True,,Yes,1,Appel Sauce Studios - SNSF
+457,"Meister, Kara Davis",1,True,,No,0,
+458,"Sanulli, Serena",1,True,,No,0,
+459,"NP-Tobias-Toralba, Andre",1,True,,No,0,
+460,"Hanson, Ronald",1,True,,Yes,3,"Hanson 1273129-1-UBHRL, Hanson 1276372-1-TEAGT, Hanson 1295582-1-TAAWF"
+461,"Fendorf, Scott",1,True,,Yes,1,Fendorf 1286676-1-GEJSS
+462,NP-MATSCI 162/172/143,1,True,,Yes,1,NP-MATSCI 162/172/143
+463,"Geballe, Theodore",1,True,,No,0,
+464,"Nolan, Garry",1,True,,No,0,
+465,"Congreve, Daniel",1,True,,No,0,
+466,"Prinz, Friedrich",1,True,,Yes,4,"Prinz 1224887-1-DPDXW, Prinz 1251322-1-UBOIW, Prinz 1251333-3-UBOIX ... (+1 more)"
+468,EOSDX,2,True,,Yes,1,EOSDX - SNSF
+469,"Longaker, Michael",1,True,,Yes,2,"Longaker 1108077-100-JHACO, Longaker 1109682-107-KHACH"
+470,"Nuyujukian, Paul",1,True,,Yes,1,Nuyujukian 1260679-141-PAJOJ
+471,"Bucksbaum, Philip",1,True,,Yes,1,Bucksbaum 1124705-1-ATDBF
+472,"Huang, Ngan F.",1,True,,Yes,3,"Huang 1203258-100-EHBKY, Huang 1270087-2-WXBJE, Huang 1298756-10-UATUK"
+473,"Boehm, Alexandria",1,True,,No,0,
+474,"Lepech, Michael",1,True,,Yes,2,"Lepech 1267922-1-GWPJC, Lepech 1280155-10-WXCCR"
+475,"Fisher, Ian",1,True,,Yes,2,"Fisher 1036107-12-ATBSI, Fisher 1237194-100-UAQHF"
+477,Velo3D,2,True,,Yes,1,Velo3D - SNSF
+479,"NP-Lenardo, Brian",1,True,,No,0,
+480,"Fuller, Gerald",1,True,,Yes,1,Fuller 1288733-1-GWPUD
+481,bioMerieux,2,True,,Yes,1,bioMerieux - SNSF
+482,Analytical Mechanics Associates - Curtiss,5,True,,Yes,1,AMA - Curtiss - SNSF
+483,Seer,2,True,,Yes,1,Seer - SNSF
+484,UCSC - Yan,5,True,,Yes,1,UCSC - Yan - SNSF
+485,NanoCarbon Creations,2,True,,Yes,1,NanoCarbon Creations - SNSF
+487,Prism Inks,2,True,,Yes,1,Prism Inks - SNSF
+488,"Dunne, Mike",1,True,,No,0,
+489,"Dekas, Anne",1,True,,Yes,2,"Dekas 1232759-20-RFAEI, Dekas 1266322-1-QACIG"
+490,"Reis, David",1,True,,Yes,1,Reis 1003337-1-BAEPB
+491,"Mao, Wendy",1,True,,Yes,2,"Mao 1036107-14-ATBSI, Mao 1251717-1-QAEZU"
+492,"NP-Tang, Mary",1,True,,No,0,
+493,"Zong, Alfred",1,True,,Yes,2,"Zong 1280117-1-FZCQG, Zong 1299061-8-DDPDB"
+495,"Woo, Joseph",1,True,,Yes,2,"Woo 1234792-100-EAGHD, Woo 1282144-100-KHAMI"
+496,"Grove, Martin",1,True,,Yes,1,Grove 1270599-1-AABPP
+497,"NP- Chen, Jane",1,True,,No,0,
+498,"Sakovsky, Maria",1,True,,No,0,
+499,"Wan, Derrick",1,True,,Yes,1,Wan 1279117-101-PAPDZ
+500,"Shaqfeh, Eric",1,True,,Yes,2,"Shaqfeh 1266710-1-QACJF, Shaqfeh 1299486-10-QAEAV"
+502,University of Wyoming - Aryana,5,True,,Yes,1,University of Wyoming - Aryana - SNSF
+503,"NP-Partridge, Richard",1,True,,No,0,
+504,"Rivas-Davila, Juan",1,True,,No,0,
+505,LLNL - DeVore,5,True,,Yes,1,LLNL - DeVore - SNSF
+507,"NP-Cramar, Natalie",1,True,,No,0,
+508,"Majumdar, Arunava",1,True,,Yes,4,"Majumdar 1036107-50-ATBSI, Majumdar 1169075-1-GJYEX, Majumdar 1248740-3-SDEAM ... (+1 more)"
+509,"Liao, Joseph",1,True,,Yes,2,"Liao 1044992-107-KASKF, Liao 1279554-101-KASBC"
+510,NP-ESS 210: Techniques in Environmental Microbiology (BIO 201),1,True,,Yes,1,NP-ESS 210: Techniques in Environmental Microbiology (BIO 201)
+512,NP-CHEM 131: Instrumental Analysis Principles and Practice,1,True,,Yes,1,NP-CHEM 131: Instrumental Analysis Principles and Practice
+514,NP-CHEM 176: Spectroscopy Laboratory,1,True,,Yes,1,NP-CHEM 176: Spectroscopy Laboratory
+517,NP-BIOE 261: Principles and Practice of Stem Cell Engineering,1,True,,Yes,1,NP-BIOE 261: Principles and Practice of Stem Cell Engineering
+518,"NP-ENGR 50E: Introduction to Materials Science, Energy Emphasis",1,True,,No,0,
+520,NP-CHEMENG 185B: Chemical Engineering Laboratory B,1,True,,Yes,1,NP-CHEMENG 185B: Chemical Engineering Laboratory B
+521,NP-E&O: Education & Outreach Events,1,True,,Yes,1,NP-E&O: Education & Outreach Events
+522,NP-EE 21N: Making at the nanometer scale: A journey into microchips.,1,True,,Yes,1,NP-EE 21N: Making at the nanometer scale: A journey into microchips.
+524,NP-BIOE 44: Fundamentals for Engineering Biology Lab,1,True,,Yes,1,NP-BIOE 44: Fundamentals for Engineering Biology Lab
+525,"NP-EPS 216: An Introduction to Quantitative X-ray Microanalysis (GEOPHYS 236, MATSCI 236)",1,True,,No,0,
+528,NP-CHEMENG 464: Polymer Chemistry,1,True,,Yes,1,NP-CHEMENG 464: Polymer Chemistry
+529,NP-MATSCI 163/173 - Mechanical Behaviors Laboratory,1,True,,Yes,1,NP-MATSCI 163/173 - Mechanical Behaviors Laboratory
+530,NP-MATSCI 323: Thin Film and Interface Microanalysis,1,True,,Yes,1,NP-MATSCI 323: Thin Film and Interface Microanalysis
+534,NP-MATSCI 143: Materials Structure and Characterization,1,True,,Yes,1,NP-MATSCI 143: Materials Structure and Characterization
+536,NP-MATSCI 161: Energy Materials Laboratory (MATSCI 171),1,True,,Yes,1,NP-MATSCI 161: Energy Materials Laboratory (MATSCI 171)
+537,"Fan, Jonathan Albert",1,True,,Yes,2,"Fan 1290500-300-WSMAM, Fan 1302156-604-SDHAE"
+538,"NP-Sakdinawat, Anne",1,True,,No,0,
+539,"NP- Medved, Donna C.",1,True,,No,0,
+540,"NP- Tang, Simon",1,True,,No,0,
+542,"Snyder, Michael",1,True,,Yes,1,Snyder 1132180-100-DHATM
+543,"Tikoo-Schantz, Sonia",1,True,,Yes,2,"Tikoo-Schantz 1234110-1-GRSBH, Tikoo-Schantz 1289344-1-WZAHS"
+544,"Intermolecular, Inc.",2,True,,Yes,1,Intermolecular - SNSF
+545,Commonwealth Fusion Systems,2,True,,Yes,1,Commonwealth Fusion Systems - SNSF
+546,Alpha Ring US,2,True,,Yes,1,Alpha Ring US - SNSF
+547,LLNL - Nakotte,5,True,,Yes,1,LLNL - Nakotte - SNSF
+548,"Wang, Shan",1,True,,Yes,4,"Wang 1256296-100-PAIDM, Wang 1282277-100-QADDM, Wang 1285288-100-QADKS ... (+1 more)"
+549,Bosch - Lang,2,True,,Yes,1,Bosch - Lang - SNSF
+550,"Sharaf, Naima G.",1,True,,Yes,1,Sharaf 1275713-100-UANDU
+551,Circularity Fuels,2,True,,Yes,1,Circularity Fuels - SNSF
+552,"Amieva, Manuel",1,True,,No,0,
+553,"Huang, Possu",1,True,,Yes,1,Huang 1268718-10-PAMHV
+554,Dioxycle,2,True,,Yes,1,Dioxycle - SNSF
+555,"Daldrup-Link, Heike",1,True,,Yes,1,Daldrup-Link 1253939-10-PAGUC
+557,Gamdan Optics,2,True,,Yes,1,Gamdan Optics - SNSF
+558,"Feldman, Benjamin",1,True,,Yes,1,Feldman 1268163-100-UAKBU
+559,"DeBoer, Charles Meno Theodore",1,True,,Yes,1,DeBoer 1287199-100-UAQNC
+560,Shoei Electronic Materials,2,True,,Yes,1,Shoei Electronic Materials - SNSF
+561,"NP-Gupta, Amita",1,True,,No,0,
+562,"NP-Kurinsky, Noah",1,True,,No,0,
+563,"Vanorio, Tiziana",1,True,,Yes,4,"Vanorio 1264063-100-UBSEV, Vanorio 1269857-10-QACPP, Vanorio 1288504-200-UBKSU ... (+1 more)"
+564,"Chen, Ian",1,True,,Yes,2,"Chen 1274149-101-DHEMP, Chen 1300808-100-WXDZH"
+565,"Joonhee, Choi",1,True,,No,0,
+566,Cradle Healthcare Company,2,True,,Yes,1,Cradle Healthcare - SNSF
+567,"NP- Carlson, Stephanie R.",1,True,,No,0,
+570,"Zhao, Renee",1,True,,Yes,1,Zhao 1274215-1-WPAAD
+571,Wavefront Vision,2,True,,Yes,1,Wavefront Vision - SNSF
+572,"Morrison, Ashby",1,True,,Yes,1,Morrison 1255386-103-PAHQW
+573,Coherent,2,True,,Yes,1,Coherent - SNSF
+574,"Wang, Xinnan",1,True,,No,0,
+575,"NP-Mulholland, Jon",1,True,,Yes,1,NP-Mulholland 1001039-100-ACAEE
+576,"Santiago, Juan",1,True,,Yes,1,Santiago 1295247-1-SDAMW
+578,"Grant, Gerald",1,True,,No,0,
+580,Seagate Technology,2,True,,Yes,1,Seagate Technology - SNSF
+581,"NP- Hamner, Romaine",1,True,,No,0,
+582,"Grillet, Nicolas",1,True,,Yes,1,Grillet 1278206-100-PAOXW
+584,UC Santa Cruz - Turk-Kubo,5,True,,Yes,1,UC Santa Cruz - Turk-Kubo - SNSF
+585,"Valdez, Tulio",1,True,,Yes,1,Valdez 1295700-100-UATHC
+586,"Monje-Deisseroth, Michelle",1,True,,Yes,1,Monje-Deisseroth 1283514-100-GHIYV
+589,Neuralink,2,True,,Yes,1,Neuralink - SNSF
+590,Rondo Energy,2,True,,Yes,1,Rondo Energy - SNSF
+591,"Chaudhuri, Ovijit",1,True,,Yes,2,"Chaudhuri 1299702-200-UAUEP, Chaudhuri 1303504-200-WSPCD"
+594,"Pleiner, Tino",1,True,,Yes,2,"Pleiner 1276324-106-EAFGS, Pleiner 1276324-111-EAFGS"
+595,"NP-Murphy, William R",1,True,,No,0,
+597,Clariant,2,True,,Yes,1,Clariant - SNSF
+599,"Yang, Fan",1,True,,Yes,1,Yang 1301915-100-UDDWY
+600,"Arrigo, Kevin",1,True,,Yes,2,"Arrigo 1245234-10-QAEQW, Arrigo 1267087-10-RDAHE"
+601,"Yeh, Ellen",1,True,,Yes,2,"Yeh 1148652-100-EHANY, Yeh 1295474-10-WTADE"
+602,"Howe, Roger",1,True,,No,0,
+603,UCSC - Telus,5,True,,Yes,1,UCSC - Telus - SNSF
+604,"Dunbar, Robert",1,True,,Yes,2,"Dunbar 1008683-1-HAJZZ, Dunbar 1277900-10-UBIRT"
+605,"Trivedi, Mudit",1,True,,No,0,
+606,"Kahn, Joseph M.",1,True,,No,0,
+607,Rubi Laboratories,2,True,,Yes,1,Rubi Laboratories - SNSF
+608,"Khosla, Chaitan",1,True,,No,0,
+609,Savor Foods Limited,2,True,,Yes,1,Savor Foods Limited - SNSF
+610,"NP-Lee, Wei-Sheng",1,True,,No,0,
+612,"Sinclair, Robert",1,True,,Yes,2,"Sinclair 1286726-1-GWPSW, Sinclair 1307950-1-WSMCH"
+613,"Paulmurugan, Ramasamy",1,True,,Yes,1,Paulmurugan 1091628-103-GHAJU
+616,"NP- Gray, Andrea",1,True,,No,0,
+617,Washington State University - Li,5,True,,Yes,1,Washington State University - Li - SNSF
+618,"Stack, Daniel",1,True,,Yes,1,Stack 1131156-1-FZBIO
+619,"Gaffney, Kelly",1,True,,No,0,
+620,"Maher, Katharine",1,True,,Yes,1,Maher 1290110-100-WSMAL
+621,"Beachy,  Philip",1,True,,No,0,
+622,Swift Solar,2,True,,Yes,1,Swift Solar - SNSF
+623,"Bendall, Sean",1,True,,Yes,1,Bendall 1195362-100-DHPAD
+624,Mitra Future Technologies (MitraChem),2,True,,Yes,1,Mitra Future Technologies (MitraChem) - SNSF
+625,"Xia, Yan",1,True,,Yes,2,"Xia 1255499-100-QAAZY, Xia 1288819-100-TBAXO"
+626,"Monolith Materials, Inc.",2,True,,No,0,
+628,"Okamura, Allison",1,True,,No,0,
+629,"Jacobs-Wagner, Christine",1,True,,No,0,
+630,SciForge,2,True,,Yes,1,SciForge - SNSF
+631,"Carbon, Inc.",2,True,,Yes,1,"Carbon, Inc. - SNSF"
+632,"Liao, Yaping Joyce",1,True,,Yes,1,Liao 1282452-100-GHIXE
+633,"Wakatsuki, Soichi",1,True,,Yes,1,Wakatsuki 1261176-100-GHHYK
+634,JSR Micro,2,True,,Yes,1,JSR Micro - SNSF
+635,CSU East Bay - Zaleski,5,True,,Yes,1,CSU East Bay - Zaleski - SNSF
+636,UC Berkeley - Salahuddin,5,True,,Yes,1,UC Berkeley - Salahuddin - SNSF
+637,"Buch, Vivek P.",1,True,,Yes,1,Buch 1300768-100-UAVCO
+640,"Jarosz, Daniel",1,True,,Yes,1,Jarosz 1297435-100-PAVDY
+641,"Torok, Natalie",1,True,,No,0,
+642,"Wernig, Marius",1,True,,No,0,
+643,"Lee, Young",1,True,,Yes,1,Lee 1036107-38-ATBSI
+644,UC Berkeley - Boettcher,5,True,,Yes,1,UC Berkeley - Boettcher - SNSF
+645,Leadoptik,2,True,,Yes,1,Leadoptik - SNSF
+646,"NP- Sibug, Mia",1,True,,No,0,
+647,"Chen, Bertha",1,True,,No,0,
+648,"Chou, Hung-Chieh",1,True,,Yes,1,Chou 1283373-100-KHAXU
+650,"NP- Chen, Charles",1,True,,No,0,
+652,"Jerby, Linvat",1,True,,No,0,
+653,"Le, Quynh- Thu",1,True,,No,0,
+654,Blu3,2,True,,Yes,1,Blu3 - SNSF
+655,Freenome,2,True,,Yes,1,Freenome - SNSF
+656,"Mitch, William",1,True,,Yes,1,Mitch 1285171-4-SABBJ
+658,University of North Dakota - Chu,5,True,,Yes,1,University of North Dakota - Chu - SNSF
+659,Gotion,2,True,,Yes,1,Gotion - SNSF
+660,"Kapetanovic, Zerina",1,True,,Yes,1,Kapetanovic 1289692-1-DPOJK
+661,Avails Medical,2,True,,Yes,1,Avails Medical - SNSF
+662,Destination 2D Inc.,2,True,,Yes,1,Destination 2D - SNSF
+663,Dynatomics,2,True,,Yes,1,Dynatomics - SNSF
+664,Ecoatoms,2,True,,Yes,1,Ecoatoms - SNSF
+665,Eleryc Inc.,2,True,,Yes,1,Eleryc - SNSF
+666,KLA-Tencor (Chen),2,True,,Yes,1,KLA-Tencor (Chen) - SNSF
+667,Physical Sciences Inc (PSI),2,True,,Yes,1,Physical Sciences - SNSF
+668,San Francisco State University - Qiu,5,True,,Yes,1,San Francisco State University - Qiu - SNSF
+669,TeraPore Technologies - Kaufman,2,True,,Yes,1,TeraPore Technologies - Kaufman - SNSF
+670,"Thintronics, Inc.",2,True,,Yes,1,Thintronics - SNSF
+671,UC Berkeley (Yang),5,True,,Yes,1,UC Berkeley - Yang - SNSF
+672,UCSC-Ayzner,5,True,,Yes,1,UCSC-Ayzner - SNSF
+673,UCSF - Chen,5,True,,Yes,1,UCSF - Chen - SNSF
+674,University of Wisconsin-Milwaukee - Rohatgi - SNSF,5,True,,Yes,1,University of Wisconsin-Rohatgi - SNSF
+675,University of California San Francisco - Persson,5,True,,Yes,1,UCSF - Persson - SNSF
+677,"Boies, Adam Meyer",1,True,,Yes,2,"Boies 1293632-1-GWPXF, Boies 1304561-1-UDDZV"
+678,"Fejer, Martin M",1,True,,No,0,
+679,"Gloyn, Anna Louise",1,True,,Yes,1,Gloyn 1247502-104-PCSFR
+680,"Ihme, Matthias",1,True,,Yes,1,Ihme 1292642-1-UBLOA
+681,"Kim, Juyong Brian",1,True,,Yes,1,Kim 1268335-100-UAKTS
+682,"Rogalla, Stephan",1,True,,Yes,1,1288306-101-KHAHY
+683,"Schumer, Molly",1,True,,Yes,1,Schumer 1308647-100-QAELJ
+684,"Wang, Adam",1,True,,Yes,1,Wang 1287364-100-SDAKV
