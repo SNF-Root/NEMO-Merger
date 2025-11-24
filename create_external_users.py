@@ -309,15 +309,8 @@ def read_qualified_users(pta_lookup: Dict[str, int]) -> List[Dict[str, Any]]:
                 if card_value and card_value.lower() not in ['nan', 'none', '']:
                     badge_number = card_value
             
-            # Build notes from company and other info
+            # Build notes from tracking sheet and other info (excluding company and account type)
             notes_parts = []
-            if company_col and not pd.isna(row[company_col]):
-                company = str(row[company_col]).strip()
-                if company and company.lower() not in ['nan', 'none', '']:
-                    notes_parts.append(f"Company: {company}")
-            
-            if account_type_value:
-                notes_parts.append(f"Account Type: {account_type_value}")
             
             if tracking_sheet_col and not pd.isna(row[tracking_sheet_col]):
                 tracking_link = str(row[tracking_sheet_col]).strip()
@@ -391,6 +384,17 @@ def read_qualified_users(pta_lookup: Dict[str, int]) -> List[Dict[str, Any]]:
                 "education_level_name": None
             }
             users.append(user)
+            
+            # Log parsed user details
+            logger.info(f"Parsed user from row {idx+1}: {username} ({email})")
+            logger.debug(f"  First: {user['first_name']}, Last: {user['last_name']}")
+            logger.debug(f"  Active: {is_active}, User Type: {user_type}")
+            if badge_number:
+                logger.debug(f"  Badge: {badge_number}")
+            if project_ids:
+                logger.debug(f"  Projects: {project_ids} (from PTAs: {ptas})")
+            if notes:
+                logger.debug(f"  Notes: {notes}")
                     
     except Exception as e:
         logger.error(f"Error reading Excel file: {e}")
@@ -400,17 +404,44 @@ def read_qualified_users(pta_lookup: Dict[str, int]) -> List[Dict[str, Any]]:
         
     return users
 
+def log_user_details(user: Dict[str, Any], prefix: str = "") -> None:
+    """Log detailed user information in a readable format."""
+    logger.info(f"{prefix}Username: {user.get('username', 'N/A')}")
+    logger.info(f"{prefix}Email: {user.get('email', 'N/A')}")
+    logger.info(f"{prefix}Name: {user.get('first_name', 'N/A')} {user.get('last_name', 'N/A')}")
+    logger.info(f"{prefix}Active: {user.get('is_active', False)}")
+    logger.info(f"{prefix}User Type ID: {user.get('type', 'N/A')}")
+    logger.info(f"{prefix}Date Joined: {user.get('date_joined', 'N/A')}")
+    if user.get('badge_number'):
+        logger.info(f"{prefix}Badge Number: {user.get('badge_number')}")
+    if user.get('projects'):
+        logger.info(f"{prefix}Projects: {user.get('projects')}")
+    if user.get('notes'):
+        logger.info(f"{prefix}Notes: {user.get('notes')}")
+    logger.info(f"{prefix}Full JSON: {json.dumps(user, indent=2, default=str)}")
+
 def create_users(users: List[Dict[str, Any]]) -> None:
     """Create users in NEMO via API."""
     if not test_api_connection():
         return
-        
-    logger.info(f"Creating {len(users)} users in NEMO...")
     
+    # Log summary of all users that will be created
+    logger.info(f"\n{'=' * 60}")
+    logger.info(f"PREVIEW: {len(users)} users to be created:")
+    logger.info(f"{'=' * 60}")
+    for idx, user in enumerate(users, 1):
+        logger.info(f"\n[{idx}/{len(users)}] User to be created:")
+        log_user_details(user, prefix="  ")
+    
+    logger.info(f"\n{'=' * 60}")
+    logger.info(f"Starting creation of {len(users)} users in NEMO...")
+    logger.info(f"{'=' * 60}\n")
+        
     created_count = 0
     failed_count = 0
     
-    for user in users:
+    for idx, user in enumerate(users, 1):
+        logger.info(f"\n[{idx}/{len(users)}] Creating user: {user['username']} ({user['email']})")
         try:
             response = requests.post(
                 NEMO_USERS_API_URL,
@@ -420,25 +451,34 @@ def create_users(users: List[Dict[str, Any]]) -> None:
             
             if response.status_code == 200:
                 created_count += 1
-                logger.info(f"✓ Created user: {user['username']} ({user['email']})")
-                logger.info(f"  User details: {user['first_name']} {user['last_name']}, "
-                          f"Active: {user['is_active']}, User Type ID: {user['type']}")
-                if user.get('notes'):
-                    logger.info(f"  Notes: {user['notes']}")
-                # Log full user data as JSON for record keeping
-                logger.debug(f"  Full user data: {json.dumps(user, indent=2)}")
+                logger.info(f"✓ SUCCESS: Created user {user['username']}")
+                log_user_details(user, prefix="  ")
+                
+                # Also log the API response if available
+                try:
+                    response_data = response.json()
+                    logger.info(f"  API Response: {json.dumps(response_data, indent=2, default=str)}")
+                except:
+                    logger.info(f"  API Response: {response.text}")
             else:
                 failed_count += 1
-                logger.error(f"✗ Failed to create user {user['username']} ({user['email']}): HTTP {response.status_code}")
+                logger.error(f"✗ FAILED: Could not create user {user['username']} ({user['email']})")
+                logger.error(f"  HTTP Status: {response.status_code}")
                 logger.error(f"  Error response: {response.text}")
-                logger.error(f"  User data attempted: {json.dumps(user, indent=2)}")
+                log_user_details(user, prefix="  ")
                 
         except requests.exceptions.RequestException as e:
             failed_count += 1
-            logger.error(f"✗ Network error creating user {user['username']} ({user['email']}): {e}")
-            logger.error(f"  User data attempted: {json.dumps(user, indent=2)}")
+            logger.error(f"✗ NETWORK ERROR: Could not create user {user['username']} ({user['email']})")
+            logger.error(f"  Error: {e}")
+            log_user_details(user, prefix="  ")
     
-    logger.info(f"User creation summary: {created_count} created, {failed_count} failed out of {len(users)} total")
+    logger.info(f"\n{'=' * 60}")
+    logger.info(f"CREATION SUMMARY:")
+    logger.info(f"  Total users: {len(users)}")
+    logger.info(f"  Successfully created: {created_count}")
+    logger.info(f"  Failed: {failed_count}")
+    logger.info(f"{'=' * 60}")
 
 def main():
     """Main function to read and create users."""

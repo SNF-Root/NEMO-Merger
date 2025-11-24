@@ -14,19 +14,19 @@ from typing import Dict, Any
 load_dotenv()
 
 # NEMO API endpoint for tools
-NEMO_TOOLS_API_URL = "https://nemo-plan.stanford.edu/api/tools/"
+NEMO_TOOLS_API_URL = "https://nemo.stanford.edu/api/tools/"
 
 # Get NEMO token from environment
-NEMO_PLAN_TOKEN = os.getenv('NEMO_PLAN_TOKEN')
-if not NEMO_PLAN_TOKEN:
-    print("Error: NEMO_PLAN_TOKEN not found in environment variables or .env file")
-    print("Please create a .env file with: NEMO_PLAN_TOKEN=your_token_here")
-    print("Or set the environment variable: export NEMO_PLAN_TOKEN=your_token_here")
+NEMO_TOKEN = os.getenv('NEMO_TOKEN')
+if not NEMO_TOKEN:
+    print("Error: NEMO_TOKEN not found in environment variables or .env file")
+    print("Please create a .env file with: NEMO_TOKEN=your_token_here")
+    print("Or set the environment variable: export NEMO_TOKEN=your_token_here")
     exit(1)
 
 # API headers with authentication
 API_HEADERS = {
-    'Authorization': f'Token {NEMO_PLAN_TOKEN}',
+    'Authorization': f'Token {NEMO_TOKEN}',
     'Content-Type': 'application/json',
     'Accept': 'application/json'
 }
@@ -39,7 +39,7 @@ def test_api_connection():
             print("✓ API connection successful")
             return True
         elif response.status_code == 401:
-            print("✗ Authentication failed: Check your NEMO_PLAN_TOKEN")
+            print("✗ Authentication failed: Check your NEMO_TOKEN")
             return False
         elif response.status_code == 403:
             print("✗ Permission denied: Check your API permissions")
@@ -88,7 +88,7 @@ def download_tools(api_url: str) -> list:
                     break
                     
             elif response.status_code == 401:
-                print("✗ Authentication failed: Check your NEMO_PLAN_TOKEN")
+                print("✗ Authentication failed: Check your NEMO_TOKEN")
                 return []
             elif response.status_code == 403:
                 print("✗ Permission denied: Check your API permissions")
