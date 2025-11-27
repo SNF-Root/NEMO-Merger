@@ -1,11 +1,21 @@
 #!/usr/bin/env python3
 """
-Script to assign tool qualifications to users based on spreadsheet data.
-1. Reads spreadsheet with tool names and user emails
+Script to create qualification records for users based on spreadsheet data.
+1. Reads spreadsheet with tool names, user emails, and qualification dates
 2. Downloads tools and creates tool name -> tool ID mapping
 3. Downloads users and creates email -> user ID mapping
 4. Matches tool names to tool IDs and emails to user IDs
-5. Adds tool IDs to user qualifications
+5. Creates qualification records at /api/qualifications/ endpoint
+
+IMPORTANT NOTE: The API marks 'qualified_on' as read-only, so historical dates 
+from the spreadsheet cannot be set. The API will automatically set qualified_on 
+to today's date when creating each qualification record.
+
+The script creates qualification records with the following structure:
+- user: user ID
+- tool: tool ID
+- qualification_level: null
+- qualified_on: automatically set by API to today's date (read-only field)
 """
 
 import requests
@@ -17,6 +27,7 @@ import argparse
 from datetime import datetime
 from dotenv import load_dotenv
 from typing import Dict, Any, List, Optional, Tuple
+from dateutil import parser as date_parser
 
 # Load environment variables from .env file
 load_dotenv()
@@ -37,6 +48,7 @@ logger = logging.getLogger(__name__)
 # NEMO API endpoints
 NEMO_TOOLS_API_URL = "https://nemo.stanford.edu/api/tools/"
 NEMO_USERS_API_URL = "https://nemo.stanford.edu/api/users/"
+NEMO_QUALIFICATIONS_API_URL = "https://nemo.stanford.edu/api/qualifications/"
 
 # Get NEMO token from environment
 NEMO_TOKEN = os.getenv('NEMO_TOKEN')
@@ -234,11 +246,14 @@ def read_spreadsheet(filename: str) -> List[Dict[str, Any]]:
     try:
         # Try Excel first, then CSV
         if filename.endswith('.xlsx') or filename.endswith('.xls'):
-            df = pd.read_excel(filename)
+            # Read Excel without auto-parsing dates to preserve original values
+            # We'll handle date parsing manually to ensure correct format
+            df = pd.read_excel(filename, parse_dates=False)
         else:
             df = pd.read_csv(filename)
         
         # Convert to list of dictionaries
+        # Use 'records' format to preserve data types
         rows = df.to_dict('records')
         
         print(f"✓ Read {len(rows)} rows from {filename}")
@@ -247,6 +262,13 @@ def read_spreadsheet(filename: str) -> List[Dict[str, Any]]:
         # Show column names for debugging
         print(f"  Columns found: {', '.join(df.columns.tolist())}")
         logger.info(f"Columns found: {', '.join(df.columns.tolist())}")
+        
+        # Log sample of date column if it exists
+        date_cols = [col for col in df.columns if 'date' in str(col).lower()]
+        if date_cols:
+            sample_col = date_cols[0]
+            print(f"  Sample date values from '{sample_col}': {df[sample_col].head(3).tolist()}")
+            logger.info(f"Sample date values from '{sample_col}': {df[sample_col].head(3).tolist()}")
         
         return rows
         
@@ -265,15 +287,71 @@ def find_column(df_columns: List[str], possible_names: List[str]) -> Optional[st
             return df_columns[idx]
     return None
 
+def parse_qualification_date(date_value: Any) -> Optional[str]:
+    """
+    Parse a qualification date from various formats and return YYYY-MM-DD format.
+    Returns None if date cannot be parsed.
+    Handles pandas Timestamp, datetime objects, Excel serial numbers, and string dates.
+    """
+    if date_value is None:
+        return None
+    
+    # Check for pandas NaN/NaT
+    if pd.isna(date_value):
+        return None
+    
+    date_str = str(date_value).strip()
+    if not date_str or date_str.lower() in ['nan', 'none', 'null', '', 'nat']:
+        return None
+    
+    try:
+        # Handle pandas Timestamp objects (from Excel dates)
+        if isinstance(date_value, pd.Timestamp):
+            # Check if it's NaT (Not a Time)
+            if pd.isna(date_value):
+                return None
+            formatted = date_value.strftime('%Y-%m-%d')
+            logger.debug(f"Parsed pandas Timestamp '{date_value}' -> '{formatted}'")
+            return formatted
+        
+        # Handle datetime objects
+        if isinstance(date_value, datetime):
+            formatted = date_value.strftime('%Y-%m-%d')
+            logger.debug(f"Parsed datetime '{date_value}' -> '{formatted}'")
+            return formatted
+        
+        # Handle Excel serial numbers (if pandas didn't convert them)
+        try:
+            if isinstance(date_value, (int, float)) and date_value > 1:
+                # Excel serial number (days since 1900-01-01)
+                excel_epoch = datetime(1899, 12, 30)
+                parsed_date = excel_epoch + pd.Timedelta(days=date_value)
+                formatted = parsed_date.strftime('%Y-%m-%d')
+                logger.debug(f"Parsed Excel serial number '{date_value}' -> '{formatted}'")
+                return formatted
+        except (ValueError, OverflowError):
+            pass
+        
+        # Try dateutil parser for string dates
+        parsed_date = date_parser.parse(date_str)
+        formatted = parsed_date.strftime('%Y-%m-%d')
+        logger.debug(f"Parsed string date '{date_str}' -> '{formatted}'")
+        return formatted
+    except (ValueError, TypeError, AttributeError) as e:
+        logger.warning(f"Could not parse date '{date_value}' (type: {type(date_value)}): {e}")
+        return None
+
 def process_spreadsheet_rows(rows: List[Dict[str, Any]], tool_lookup: Dict[str, int], email_lookup: Dict[str, int]) -> List[Dict[str, Any]]:
     """
     Process spreadsheet rows and match tool names to tool IDs and emails to user IDs.
+    Also reads qualification dates from the spreadsheet.
     Returns list of assignments to make.
     """
     logger.info(f"Processing {len(rows)} spreadsheet rows")
     assignments = []
     missing_tool_count = 0
     missing_user_count = 0
+    missing_date_count = 0
     
     # Find column names (case-insensitive)
     if not rows:
@@ -282,6 +360,7 @@ def process_spreadsheet_rows(rows: List[Dict[str, Any]], tool_lookup: Dict[str, 
     df_columns = list(rows[0].keys())
     equipment_col = find_column(df_columns, ['equipment', 'tool', 'tool name', 'tool_name'])
     member_col = find_column(df_columns, ['member', 'email', 'user_email', 'member_email'])
+    date_col = find_column(df_columns, ['date', 'qualification date', 'qualified_on', 'qualified on', 'qualification_date'])
     
     if not equipment_col:
         print("✗ Error: Could not find 'equipment' column in spreadsheet")
@@ -295,13 +374,35 @@ def process_spreadsheet_rows(rows: List[Dict[str, Any]], tool_lookup: Dict[str, 
     
     print(f"  Using column '{equipment_col}' for tool names")
     print(f"  Using column '{member_col}' for user emails")
+    if date_col:
+        print(f"  Using column '{date_col}' for qualification dates")
+    else:
+        print(f"  ⚠ Warning: No qualification date column found. Will use null for qualified_on.")
     logger.info(f"Using column '{equipment_col}' for tool names")
     logger.info(f"Using column '{member_col}' for user emails")
+    if date_col:
+        logger.info(f"Using column '{date_col}' for qualification dates")
     
     for idx, row in enumerate(rows, 1):
         # Get tool name and email
         tool_name = str(row.get(equipment_col, '')).strip()
         email = str(row.get(member_col, '')).strip().lower()
+        
+        # Get qualification date (optional)
+        qualified_on = None
+        if date_col:
+            date_value = row.get(date_col)
+            # Log raw value for debugging
+            if idx <= 5:  # Only log first few for debugging
+                logger.info(f"Row {idx}: Raw date value: '{date_value}' (type: {type(date_value).__name__})")
+            qualified_on = parse_qualification_date(date_value)
+            if not qualified_on:
+                missing_date_count += 1
+                if idx <= 5:  # Only log first few warnings
+                    logger.warning(f"Row {idx}: Could not parse qualification date '{date_value}' (type: {type(date_value).__name__}), will use null")
+            else:
+                if idx <= 5:  # Only log first few for debugging
+                    logger.info(f"Row {idx}: Parsed qualification date: '{qualified_on}' from '{date_value}'")
         
         # Skip rows with missing data
         if not tool_name or tool_name.lower() in ['nan', 'none', 'null', '']:
@@ -334,18 +435,47 @@ def process_spreadsheet_rows(rows: List[Dict[str, Any]], tool_lookup: Dict[str, 
             'tool_id': tool_id,
             'email': email,
             'user_id': user_id,
+            'qualified_on': qualified_on,
             'row': idx
         })
-        logger.debug(f"Row {idx}: Matched '{tool_name}' (ID: {tool_id}) -> '{email}' (User ID: {user_id})")
+        logger.debug(f"Row {idx}: Matched '{tool_name}' (ID: {tool_id}) -> '{email}' (User ID: {user_id}), date: {qualified_on}")
     
     print(f"✓ Processed {len(rows)} rows: {len(assignments)} valid assignments")
     if missing_tool_count > 0:
         print(f"  ⚠ {missing_tool_count} rows with missing tools")
     if missing_user_count > 0:
         print(f"  ⚠ {missing_user_count} rows with missing users")
+    if missing_date_count > 0:
+        print(f"  ⚠ {missing_date_count} rows with missing/unparseable dates (will use null)")
     
-    logger.info(f"Processed {len(rows)} rows: {len(assignments)} valid assignments ({missing_tool_count} missing tools, {missing_user_count} missing users)")
+    logger.info(f"Processed {len(rows)} rows: {len(assignments)} valid assignments ({missing_tool_count} missing tools, {missing_user_count} missing users, {missing_date_count} missing dates)")
     return assignments
+
+def verify_user_account_exists(user_id: int, email: str) -> bool:
+    """Verify that a user account exists and is accessible."""
+    user_url = f"{NEMO_USERS_API_URL}{user_id}/"
+    try:
+        response = requests.get(user_url, headers=API_HEADERS)
+        if response.status_code == 200:
+            user_data = response.json()
+            # Check if user is active (some APIs have an 'active' or 'is_active' field)
+            # If the user exists and we can get their data, consider them active
+            user_email = user_data.get('email', '').strip().lower()
+            if user_email and user_email == email.strip().lower():
+                logger.debug(f"Verified user {user_id} ({email}) account exists and is accessible")
+                return True
+            else:
+                logger.warning(f"User {user_id} email mismatch: expected '{email}', got '{user_email}'")
+                return False
+        elif response.status_code == 404:
+            logger.warning(f"User {user_id} ({email}) account not found (404)")
+            return False
+        else:
+            logger.warning(f"Failed to verify user {user_id} ({email}): HTTP {response.status_code}")
+            return False
+    except requests.exceptions.RequestException as e:
+        logger.error(f"Network error verifying user {user_id} ({email}): {e}")
+        return False
 
 def get_user_qualifications(user_id: int) -> Optional[List[int]]:
     """Get current qualifications for a user."""
@@ -356,6 +486,9 @@ def get_user_qualifications(user_id: int) -> Optional[List[int]]:
             user_data = response.json()
             qualifications = user_data.get('qualifications', [])
             return qualifications if isinstance(qualifications, list) else []
+        elif response.status_code == 404:
+            logger.error(f"User {user_id} account not found (404)")
+            return None
         else:
             logger.error(f"Failed to get user {user_id}: HTTP {response.status_code}")
             return None
@@ -363,51 +496,101 @@ def get_user_qualifications(user_id: int) -> Optional[List[int]]:
         logger.error(f"Network error getting user {user_id}: {e}")
         return None
 
-def update_user_qualifications(user_id: int, tool_id: int, email: str, tool_name: str) -> Tuple[bool, bool]:
-    """
-    Add a tool qualification to a user's qualifications.
-    Returns (success, was_skipped) tuple.
-    """
-    logger.info(f"Updating user {user_id} ({email}) with tool qualification {tool_id} ({tool_name})")
-    
-    # Get current qualifications
-    current_qualifications = get_user_qualifications(user_id)
-    if current_qualifications is None:
-        print(f"✗ Failed to get current qualifications for user {user_id}")
-        logger.error(f"Failed to get current qualifications for user {user_id}")
-        return (False, False)
-    
-    # Check if qualification already exists
-    if tool_id in current_qualifications:
-        print(f"  ⊘ User {user_id} ({email}) already has qualification for tool {tool_id} ({tool_name}). Skipping.")
-        logger.info(f"User {user_id} ({email}) already has qualification for tool {tool_id} ({tool_name}). Skipping.")
-        return (True, True)  # Success but skipped (already qualified)
-    
-    # Add the new qualification
-    updated_qualifications = current_qualifications + [tool_id]
-    
-    # Update user via PATCH
-    update_url = f"{NEMO_USERS_API_URL}{user_id}/"
+def check_qualification_exists(user_id: int, tool_id: int) -> bool:
+    """Check if a qualification record already exists for this user and tool."""
     try:
-        payload = {
-            'qualifications': updated_qualifications
-        }
-        logger.debug(f"User {user_id} update payload: {json.dumps(payload)}")
-        
-        response = requests.patch(update_url, json=payload, headers=API_HEADERS)
-        logger.debug(f"User {user_id} update response status: {response.status_code}")
+        # Query qualifications endpoint for this user and tool
+        params = {'user': user_id, 'tool': tool_id}
+        response = requests.get(NEMO_QUALIFICATIONS_API_URL, headers=API_HEADERS, params=params)
         
         if response.status_code == 200:
-            logger.info(f"Successfully updated user {user_id} ({email}) with tool qualification {tool_id} ({tool_name})")
-            return (True, False)  # Success, not skipped
+            data = response.json()
+            # Handle both list and paginated responses
+            if isinstance(data, list):
+                qualifications = data
+            elif isinstance(data, dict) and 'results' in data:
+                qualifications = data['results']
+            else:
+                qualifications = []
+            
+            return len(qualifications) > 0
         else:
-            print(f"✗ Failed to update user {user_id}: HTTP {response.status_code}")
+            logger.debug(f"Could not check existing qualifications: HTTP {response.status_code}")
+            return False
+    except requests.exceptions.RequestException as e:
+        logger.debug(f"Error checking existing qualifications: {e}")
+        return False
+
+def create_qualification_record(user_id: int, tool_id: int, email: str, tool_name: str, qualified_on: Optional[str] = None) -> Tuple[bool, bool]:
+    """
+    Create a qualification record at the /api/qualifications/ endpoint.
+    
+    NOTE: The API marks 'qualified_on' as read-only, so historical dates cannot be set.
+    The API will automatically set qualified_on to today's date when creating a qualification.
+    
+    Returns (success, was_skipped) tuple.
+    """
+    logger.info(f"Creating qualification record: user {user_id} ({email}) -> tool {tool_id} ({tool_name})")
+    if qualified_on:
+        logger.warning(f"  ⚠ Note: Historical date '{qualified_on}' cannot be set - API will use today's date (qualified_on is read-only)")
+    
+    # First verify the user account exists and is accessible
+    if not verify_user_account_exists(user_id, email):
+        print(f"  ⊘ User {user_id} ({email}) account not found or not accessible. Skipping.")
+        logger.warning(f"User {user_id} ({email}) account not found or not accessible. Skipping qualification creation.")
+        return (False, True)  # Failed but skipped (account doesn't exist)
+    
+    # Check if qualification already exists
+    if check_qualification_exists(user_id, tool_id):
+        print(f"  ⊘ User {user_id} ({email}) already has qualification record for tool {tool_id} ({tool_name}). Skipping.")
+        logger.info(f"User {user_id} ({email}) already has qualification record for tool {tool_id} ({tool_name}). Skipping.")
+        return (True, True)  # Success but skipped (already qualified)
+    
+    # Create qualification record via POST
+    # NOTE: qualified_on is read-only in the API, so we don't include it in the payload
+    try:
+        payload = {
+            'user': user_id,
+            'tool': tool_id,
+            'qualification_level': None
+            # qualified_on is intentionally omitted - API sets it automatically to today's date
+        }
+        logger.debug(f"Qualification creation payload: {json.dumps(payload, default=str)}")
+        
+        response = requests.post(NEMO_QUALIFICATIONS_API_URL, json=payload, headers=API_HEADERS)
+        logger.debug(f"Qualification creation response status: {response.status_code}")
+        logger.debug(f"Qualification creation response: {response.text[:500]}")
+        
+        if response.status_code in [200, 201]:  # Created (some APIs return 200 instead of 201)
+            try:
+                response_data = response.json()
+                created_date = response_data.get('qualified_on', 'not in response')
+                logger.info(f"Successfully created qualification record: user {user_id} ({email}) -> tool {tool_id} ({tool_name})")
+                if qualified_on and created_date != 'not in response':
+                    logger.warning(f"  ⚠ API set qualified_on to '{created_date}' (historical date '{qualified_on}' cannot be set - field is read-only)")
+            except:
+                pass
+            return (True, False)  # Success, not skipped
+        elif response.status_code == 400:
+            # Check if it's a duplicate error
+            error_text = response.text.lower()
+            if 'already exists' in error_text or 'duplicate' in error_text:
+                print(f"  ⊘ Qualification already exists for user {user_id} ({email}) -> tool {tool_id} ({tool_name}). Skipping.")
+                logger.info(f"Qualification already exists (400): user {user_id} ({email}) -> tool {tool_id} ({tool_name})")
+                return (True, True)  # Success but skipped (already exists)
+            else:
+                print(f"✗ Failed to create qualification: HTTP {response.status_code}")
+                print(f"  Error response: {response.text[:200]}")
+                logger.error(f"Failed to create qualification: HTTP {response.status_code} - {response.text[:200]}")
+                return (False, False)
+        else:
+            print(f"✗ Failed to create qualification: HTTP {response.status_code}")
             print(f"  Error response: {response.text[:200]}")
-            logger.error(f"Failed to update user {user_id} ({email}): HTTP {response.status_code} - {response.text[:200]}")
+            logger.error(f"Failed to create qualification: HTTP {response.status_code} - {response.text[:200]}")
             return (False, False)
     except requests.exceptions.RequestException as e:
-        print(f"✗ Network error updating user {user_id}: {e}")
-        logger.error(f"Network error updating user {user_id} ({email}): {e}", exc_info=True)
+        print(f"✗ Network error creating qualification: {e}")
+        logger.error(f"Network error creating qualification: {e}", exc_info=True)
         return (False, False)
 
 def main():
@@ -433,7 +616,7 @@ Examples:
     )
     parser.add_argument('spreadsheet', 
                        nargs='?',  # Make it optional
-                       default='SNSF-Data/SNL Qualified Users.xlsx',
+                       default='SNSF-Data/SNC Qualified Users.xlsx',
                        help='Path to spreadsheet file (CSV or Excel) with tool names and user emails (default: SNSF-Data/SNL Qualified Users.xlsx)')
     parser.add_argument('--tools', 
                        default='tools_download.json',
@@ -455,12 +638,18 @@ Examples:
     print("=" * 60)
     print("Assigning Tool Qualifications to Users")
     print("=" * 60)
+    print("\n⚠  IMPORTANT: API LIMITATION")
+    print("   The API marks 'qualified_on' as read-only.")
+    print("   Historical dates from your spreadsheet CANNOT be set.")
+    print("   All qualifications will be dated as today's date.")
+    print("=" * 60)
     print("\nThis script will:")
-    print("1. Read spreadsheet with tool names and user emails")
+    print("1. Read spreadsheet with tool names, user emails, and qualification dates")
     print("2. Download or load tools and create tool name -> tool ID mapping")
     print("3. Download or load users and create email -> user ID mapping")
     print("4. Match tool names to tool IDs and emails to user IDs")
-    print("5. Add tool IDs to user qualifications")
+    print("5. Create qualification records at /api/qualifications/ endpoint")
+    print("   (qualified_on will be automatically set to today's date by the API)")
     print("-" * 60)
     print(f"\nConfiguration:")
     print(f"  Spreadsheet: {args.spreadsheet}")
@@ -488,6 +677,11 @@ Examples:
     if not test_api_connection(NEMO_USERS_API_URL, "Users"):
         print("Cannot proceed without valid users API connection.")
         logger.error("Cannot proceed without valid users API connection.")
+        return
+    
+    if not test_api_connection(NEMO_QUALIFICATIONS_API_URL, "Qualifications"):
+        print("Cannot proceed without valid qualifications API connection.")
+        logger.error("Cannot proceed without valid qualifications API connection.")
         return
     
     # Step 1: Load or download tools
@@ -568,36 +762,42 @@ Examples:
         print(f"  ... and {len(assignments) - 10} more")
         logger.info(f"  ... and {len(assignments) - 10} more")
     
-    # Step 5: Update user qualifications
+    # Step 5: Create qualification records
     print("\n" + "=" * 60)
-    print("Step 5: Assigning tool qualifications to users...")
+    print("Step 5: Creating qualification records...")
     print("=" * 60)
     logger.info("=" * 60)
-    logger.info("Step 5: Assigning tool qualifications to users")
+    logger.info("Step 5: Creating qualification records")
     logger.info("=" * 60)
     
     success_count = 0
     failed_count = 0
-    skipped_count = 0
+    skipped_count = 0  # Already qualified
+    account_not_found_count = 0  # Account doesn't exist
     
     for idx, assignment in enumerate(assignments, 1):
         tool_id = assignment['tool_id']
         tool_name = assignment['tool_name']
         user_id = assignment['user_id']
         email = assignment['email']
+        qualified_on = assignment.get('qualified_on')
         
-        logger.info(f"[{idx}/{len(assignments)}] Processing assignment: tool {tool_id} '{tool_name}' → user {user_id} '{email}'")
+        date_display = f" (date: {qualified_on})" if qualified_on else " (date: null)"
+        logger.info(f"[{idx}/{len(assignments)}] Processing qualification: tool {tool_id} '{tool_name}' → user {user_id} '{email}'{date_display}")
         
-        print(f"  [{idx}/{len(assignments)}] Assigning tool '{tool_name}' (ID: {tool_id}) to user '{email}' (ID: {user_id})...")
-        success, was_skipped = update_user_qualifications(user_id, tool_id, email, tool_name)
+        print(f"  [{idx}/{len(assignments)}] Creating qualification: tool '{tool_name}' (ID: {tool_id}) → user '{email}' (ID: {user_id}){date_display}...")
+        success, was_skipped = create_qualification_record(user_id, tool_id, email, tool_name, qualified_on)
         if success:
             if was_skipped:
-                skipped_count += 1
+                skipped_count += 1  # Already qualified
             else:
                 success_count += 1
             print(f"    ✓ Success")
         else:
-            failed_count += 1
+            if was_skipped:
+                account_not_found_count += 1  # Account doesn't exist
+            else:
+                failed_count += 1
             print(f"    ✗ Failed")
     
     # Summary
@@ -615,6 +815,7 @@ Examples:
         'valid_assignments': len(assignments),
         'successfully_updated': success_count,
         'skipped': skipped_count,
+        'account_not_found': account_not_found_count,
         'failed': failed_count
     }
     
@@ -624,6 +825,7 @@ Examples:
     print(f"Valid assignments: {summary_data['valid_assignments']}")
     print(f"Successfully updated: {summary_data['successfully_updated']}")
     print(f"Skipped (already qualified): {summary_data['skipped']}")
+    print(f"Skipped (account not found): {summary_data['account_not_found']}")
     print(f"Failed updates: {summary_data['failed']}")
     print("=" * 60)
     
@@ -633,6 +835,7 @@ Examples:
     logger.info(f"Valid assignments: {summary_data['valid_assignments']}")
     logger.info(f"Successfully updated: {summary_data['successfully_updated']}")
     logger.info(f"Skipped (already qualified): {summary_data['skipped']}")
+    logger.info(f"Skipped (account not found): {summary_data['account_not_found']}")
     logger.info(f"Failed updates: {summary_data['failed']}")
     logger.info("=" * 60)
     logger.info("Script completed")
