@@ -33,7 +33,7 @@ from dateutil import parser as date_parser
 load_dotenv()
 
 # Set up logging first (before token check so we can log errors)
-log_filename = f"logs/assign_tool_qualifications_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
+log_filename = f"logs/final_assign_tool_qualifications_{datetime.now().strftime('%Y%m%d_%H%M%S')}.log"
 os.makedirs('logs', exist_ok=True)  # Ensure logs directory exists
 logging.basicConfig(
     level=logging.INFO,
@@ -601,14 +601,14 @@ def main():
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
-  # Use default spreadsheet (SNSF-Data/SNL Qualified Users.xlsx) and default JSON files
+  # Use default spreadsheet (new_qualifications_20251231_152818.xlsx) and default JSON files
   python3 assign_tool_qualifications.py
   
   # Use default spreadsheet with custom tools and users JSON files
   python3 assign_tool_qualifications.py --tools tools.json --users users.json
   
   # Use custom spreadsheet with default JSON files
-  python3 assign_tool_qualifications.py "SNSF-Data/SNC Qualified Users.xlsx"
+  python3 assign_tool_qualifications.py "SNSF-Data/Final SNL Qualified Users.xlsx"
   
   # Use custom spreadsheet and custom JSON files
   python3 assign_tool_qualifications.py "custom_spreadsheet.xlsx" --tools tools.json --users users.json
@@ -616,8 +616,8 @@ Examples:
     )
     parser.add_argument('spreadsheet', 
                        nargs='?',  # Make it optional
-                       default='SNSF-Data/SNC Qualified Users.xlsx',
-                       help='Path to spreadsheet file (CSV or Excel) with tool names and user emails (default: SNSF-Data/SNL Qualified Users.xlsx)')
+                       default='/Users/adenton/Desktop/NEMO-Merger/SNSF-Data/Final SNL Qualified Users.xlsx',
+                       help='Path to spreadsheet file (CSV or Excel) with tool names and user emails (default: Final SNC Qualified Users.xlsx)')
     parser.add_argument('--tools', 
                        default='tools_download.json',
                        help='Path to tools JSON file (default: tools_download.json). If file does not exist, tools will be downloaded from API.')

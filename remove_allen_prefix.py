@@ -7,14 +7,16 @@ and any nested subcategories under these main categories.
 
 import requests
 import os
+import logging
+from datetime import datetime
 from dotenv import load_dotenv
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Tuple
 
 # Load environment variables from .env file
 load_dotenv()
 
 # NEMO API endpoint for tools
-NEMO_TOOLS_API_URL = "https://nemo-plan.stanford.edu/api/tools/"
+NEMO_TOOLS_API_URL = "https://nemo.stanford.edu/api/tools/"
 
 # Get NEMO token from environment
 NEMO_TOKEN = os.getenv('NEMO_TOKEN')
@@ -31,41 +33,94 @@ API_HEADERS = {
     'Accept': 'application/json'
 }
 
-def test_api_connection() -> bool:
+def setup_logging() -> Tuple[logging.Logger, str]:
+    """
+    Set up logging to write messages to both a file and the console.
+    
+    This creates a log file with a timestamp in its name so each run creates a new log.
+    Log messages will appear both in the file and printed to the console.
+    
+    Returns:
+        Tuple[logging.Logger, str]: A tuple containing:
+            - logger: The logging.Logger object to use for logging
+            - log_path: The full path to the log file that was created
+    """
+    # Get the current date and time, format it as YYYYMMDD_HHMMSS
+    # Example: 20251202_143207 (December 2, 2025 at 14:32:07)
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # Create a filename for the log file with the timestamp
+    log_filename = f"remove_allen_prefix_log_{timestamp}.log"
+    # Define the directory where log files will be stored
+    log_dir = "logs"
+    
+    # Check if the logs directory exists
+    if not os.path.exists(log_dir):
+        # If it doesn't exist, create it
+        # makedirs() creates the directory and any parent directories needed
+        os.makedirs(log_dir)
+    
+    # Combine the directory path and filename to create the full file path
+    # Example: logs/remove_allen_prefix_log_20251202_143207.log
+    log_path = os.path.join(log_dir, log_filename)
+    
+    # Configure the logging system with these settings:
+    logging.basicConfig(
+        level=logging.DEBUG,  # Log all messages (DEBUG, INFO, WARNING, ERROR, CRITICAL)
+        # Format for log messages: timestamp - level - message
+        # Example: 2025-12-02 14:32:07,123 - INFO - Logging initialized
+        format='%(asctime)s - %(levelname)s - %(message)s',
+        handlers=[
+            logging.FileHandler(log_path),  # Write logs to the file
+            logging.StreamHandler()          # Also print logs to console (stdout)
+        ]
+    )
+    
+    # Get a logger object for this module
+    # __name__ is the module name (e.g., '__main__' or 'remove_allen_prefix')
+    logger = logging.getLogger(__name__)
+    # Log that logging has been initialized
+    logger.info("=" * 60)
+    logger.info("ALLEN PREFIX REMOVAL SESSION STARTED")
+    logger.info("=" * 60)
+    logger.info(f"Log file: {log_path}")
+    
+    return logger, log_path
+
+def test_api_connection(logger: logging.Logger) -> bool:
     """Test the API connection and authentication."""
     try:
         response = requests.get(NEMO_TOOLS_API_URL, headers=API_HEADERS)
         if response.status_code == 200:
-            print("✓ API connection successful")
+            logger.info("✓ API connection successful")
             return True
         elif response.status_code == 401:
-            print("✗ Authentication failed: Check your NEMO_TOKEN")
+            logger.error("✗ Authentication failed: Check your NEMO_TOKEN")
             return False
         else:
-            print(f"✗ API connection failed: HTTP {response.status_code}")
+            logger.error(f"✗ API connection failed: HTTP {response.status_code}")
             return False
     except requests.exceptions.RequestException as e:
-        print(f"✗ Network error connecting to API: {e}")
+        logger.error(f"✗ Network error connecting to API: {e}")
         return False
 
-def download_tools() -> List[Dict[str, Any]]:
+def download_tools(logger: logging.Logger) -> List[Dict[str, Any]]:
     """Download the list of tools from NEMO API."""
     try:
         response = requests.get(NEMO_TOOLS_API_URL, headers=API_HEADERS)
         if response.status_code == 200:
             tools = response.json()
-            print(f"✓ Successfully downloaded {len(tools)} tools")
+            logger.info(f"✓ Successfully downloaded {len(tools)} tools")
             return tools
         else:
-            print(f"✗ Failed to download tools: HTTP {response.status_code}")
+            logger.error(f"✗ Failed to download tools: HTTP {response.status_code}")
             return []
     except requests.exceptions.RequestException as e:
-        print(f"✗ Network error downloading tools: {e}")
+        logger.error(f"✗ Network error downloading tools: {e}")
         return []
 
-def find_tools_to_fix(tools: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+def find_tools_to_fix(tools: List[Dict[str, Any]], logger: logging.Logger) -> List[Dict[str, Any]]:
     """Find tools that need the 'Allen/' prefix removed."""
-    categories_to_fix = ['Allen/McCullough', 'Allen/Moore', 'Allen/Spilker', 'Allen/Shriram']
+    categories_to_fix = ['Allen/McCullough']
     tools_to_fix = []
 
     for tool in tools:
@@ -78,69 +133,72 @@ def find_tools_to_fix(tools: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
                     new_category = category.replace('Allen/', '', 1)  # Only replace first occurrence
                     tool['new_category'] = new_category
                     tools_to_fix.append(tool)
-                    print(f"Found tool to fix: {tool['name']} - {category} → {new_category}")
+                    logger.info(f"Found tool to fix: {tool['name']} - {category} → {new_category}")
                     break  # Found a match, no need to check other prefixes
 
     return tools_to_fix
 
-def update_tool(tool_id: int, payload: Dict[str, Any]) -> bool:
+def update_tool(tool_id: int, payload: Dict[str, Any], logger: logging.Logger) -> bool:
     """Update a tool's information via the NEMO API."""
     update_url = f"{NEMO_TOOLS_API_URL}{tool_id}/"
     try:
-        print(f"  Sending payload: {payload}")
+        logger.debug(f"  Sending payload: {payload}")
         response = requests.patch(update_url, json=payload, headers=API_HEADERS)
         if response.status_code == 200:
-            print(f"  ✓ API response: {response.json()}")
+            logger.debug(f"  ✓ API response: {response.json()}")
             return True
         else:
-            print(f"✗ Failed to update tool {tool_id}: HTTP {response.status_code} - {response.text}")
+            logger.error(f"✗ Failed to update tool {tool_id}: HTTP {response.status_code} - {response.text}")
             return False
     except requests.exceptions.RequestException as e:
-        print(f"✗ Network error updating tool {tool_id}: {e}")
+        logger.error(f"✗ Network error updating tool {tool_id}: {e}")
         return False
 
 def main():
     """Main function to remove 'Allen/' prefix from specific tools."""
-    print("Starting removal of 'Allen/' prefix from specific tools...")
-    print(f"API Endpoint: {NEMO_TOOLS_API_URL}")
-    print("-" * 60)
+    # Set up logging first
+    logger, log_path = setup_logging()
+    
+    logger.info("Starting removal of 'Allen/' prefix from specific tools...")
+    logger.info(f"API Endpoint: {NEMO_TOOLS_API_URL}")
+    logger.info("-" * 60)
 
     # Test API connection first
-    if not test_api_connection():
-        print("Cannot proceed without valid API connection.")
+    if not test_api_connection(logger):
+        logger.error("Cannot proceed without valid API connection.")
         return
 
     # Download tools
-    tools = download_tools()
+    tools = download_tools(logger)
     if not tools:
-        print("No tools downloaded. Cannot proceed.")
+        logger.error("No tools downloaded. Cannot proceed.")
         return
 
     # Find tools that need fixing
-    tools_to_fix = find_tools_to_fix(tools)
+    tools_to_fix = find_tools_to_fix(tools, logger)
     
     if not tools_to_fix:
-        print("✓ No tools found that need the 'Allen/' prefix removed.")
+        logger.info("✓ No tools found that need the 'Allen/' prefix removed.")
         return
 
-    print(f"\nFound {len(tools_to_fix)} tools that need fixing.")
+    logger.info(f"\nFound {len(tools_to_fix)} tools that need fixing.")
     
     # Update tools
     success_count = 0
     for tool in tools_to_fix:
-        print(f"\nFixing tool {tool['id']}: {tool['name']}")
-        if update_tool(tool['id'], {'_category': tool['new_category']}):
+        logger.info(f"\nFixing tool {tool['id']}: {tool['name']}")
+        if update_tool(tool['id'], {'_category': tool['new_category']}, logger):
             success_count += 1
-            print(f"✓ Updated tool {tool['id']}: {tool['name']} → {tool['new_category']}")
+            logger.info(f"✓ Updated tool {tool['id']}: {tool['name']} → {tool['new_category']}")
         else:
-            print(f"✗ Failed to update tool {tool['id']}: {tool['name']}")
+            logger.error(f"✗ Failed to update tool {tool['id']}: {tool['name']}")
 
-    print("\n" + "=" * 60)
-    print("ALLEN PREFIX REMOVAL SUMMARY")
-    print("=" * 60)
-    print(f"Total tools found needing fixes: {len(tools_to_fix)}")
-    print(f"Successfully updated: {success_count}")
-    print(f"Failed updates: {len(tools_to_fix) - success_count}")
+    logger.info("\n" + "=" * 60)
+    logger.info("ALLEN PREFIX REMOVAL SUMMARY")
+    logger.info("=" * 60)
+    logger.info(f"Total tools found needing fixes: {len(tools_to_fix)}")
+    logger.info(f"Successfully updated: {success_count}")
+    logger.info(f"Failed updates: {len(tools_to_fix) - success_count}")
 
 if __name__ == "__main__":
     main()
