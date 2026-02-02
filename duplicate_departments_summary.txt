@@ -1,0 +1,70 @@
+EXACT DUPLICATE DEPARTMENTS TO DELETE
+=====================================
+
+The following departments are exact duplicates (same normalized name).
+Recommendation: Keep the lower ID (original), delete the higher ID (newly added with "Department" suffix).
+
+1.  DELETE ID  27: "Aeronautics & Astronautics Department"
+    KEEP   ID   2: "Aeronautics & Astronautics"
+
+2.  DELETE ID  30: "Applied Physics Department"
+    KEEP   ID   3: "Applied Physics"
+
+3.  DELETE ID  31: "Biochemistry Department"
+    KEEP   ID   4: "Biochemistry"
+
+4.  DELETE ID  32: "Bioengineering Department"
+    KEEP   ID   5: "Bioengineering"
+
+5.  DELETE ID  33: "Biology Department"
+    KEEP   ID   6: "Biology"
+
+6.  DELETE ID  35: "Cardiothoracic Surgery Department"
+    KEEP   ID  34: "Cardiothoracic Surgery"
+
+7.  DELETE ID  36: "Chemical Engineering Department"
+    KEEP   ID   8: "Chemical Engineering"
+
+8.  DELETE ID  38: "Chemistry Department"
+    KEEP   ID   9: "Chemistry"
+
+9.  DELETE ID  39: "Civil & Environmental Engineering Department"
+    KEEP   ID   1: "Civil and Environmental Engineering"
+
+10. DELETE ID  40: "Dermatology Department"
+    KEEP   ID  11: "Dermatology"
+
+11. DELETE ID  45: "Electrical Engineering Department"
+    KEEP   ID  12: "Electrical Engineering"
+
+12. DELETE ID  50: "Materials Science & Engineering Department"
+    KEEP   ID  14: "Materials Science & Engineering"
+
+13. DELETE ID  51: "Mechanical Engineering Department"
+    KEEP   ID  15: "Mechanical Engineering"
+
+14. DELETE ID  52: "Medicine Department"
+    KEEP   ID  16: "Medicine"
+
+15. DELETE ID  54: "Microbiology & Immunology Department"
+    KEEP   ID  17: "Microbiology & Immunology"
+
+16. DELETE ID  55: "Molecular & Cellular Physiology Department"
+    KEEP   ID  18: "Molecular & Cellular Physiology"
+
+17. DELETE ID  56: "Neurobiology Department"
+    KEEP   ID  19: "Neurobiology"
+
+18. DELETE ID  58: "Neurosurgery Department"
+    KEEP   ID  20: "Neurosurgery"
+
+19. DELETE ID  61: "Ophthalmology Department"
+    KEEP   ID  21: "Ophthalmology"
+
+20. DELETE ID  67: "Physics Department"
+    KEEP   ID  22: "Physics"
+
+21. DELETE ID  70: "Radiology Department"
+    KEEP   ID  23: "Radiology"
+
+TOTAL: 21 departments to delete (IDs: 27, 30, 31, 32, 33, 35, 36, 38, 39, 40, 45, 50, 51, 52, 54, 55, 56, 58, 61, 67, 70)
